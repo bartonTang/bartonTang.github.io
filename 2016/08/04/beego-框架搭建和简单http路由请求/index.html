@@ -5,7 +5,7 @@
   
 
 
-<html class="theme-next muse use-motion">
+<html class="theme-next pisces use-motion">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -115,7 +115,7 @@ beego 框架搭建：先安装Golang，这个不会的可以看http://bartontang
 <script type="text/javascript" id="hexo.configuration">
   var NexT = window.NexT || {};
   var CONFIG = {
-    scheme: 'Muse',
+    scheme: 'Pisces',
     sidebar: {"position":"left","display":"post"},
     fancybox: true,
     motion: true,
@@ -316,7 +316,7 @@ beego 框架搭建：先安装Golang，这个不会的可以看http://bartontang
 <figure class="highlight golang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> controllers</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> TestController <span class="keyword">struct</span> &#123;</div><div class="line">	beego.Controller</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">Get</span><span class="params">()</span></span> &#123;</div><div class="line">	c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">		<span class="string">"msg"</span>:  <span class="string">"success"</span>,</div><div class="line">		<span class="string">"data"</span>: <span class="literal">false</span>,</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">Post</span><span class="params">()</span></span> &#123;</div><div class="line">	account := c.GetString(<span class="string">"account"</span>)</div><div class="line">	password := c.GetString(<span class="string">"password"</span>)</div><div class="line">	beego.Info(account)</div><div class="line"></div><div class="line">	c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">		<span class="string">"msg"</span>: <span class="string">"success"</span>,</div><div class="line">		<span class="string">"data"</span>: <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</div><div class="line">			<span class="string">"account"</span>:  account,</div><div class="line">			<span class="string">"password"</span>: password,</div><div class="line">		&#125;,</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>这里分别对Get和Post都做了处理~Get就直接返回一个Json数据给Client；Post呢则是接收Client传过来的两个Json字段account 和 password 并且将account 和 password再重新发回给Client。<br>beego.Info(account) 这句话是打印account出来</p>
 <p>下面就用swift做个小测试，下面这个是自己封装过的代码，先随便贴下：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> t = <span class="type">NetworkController</span>.shareManager()</div><div class="line"> t.request(.<span class="type">GET</span>, <span class="string">"http://localhost:8080/test"</span>).responseJSON &#123; (resp: <span class="type">Response</span>&lt;<span class="type">AnyObject</span>, <span class="type">NSError</span>&gt;) <span class="keyword">in</span></div><div class="line">	<span class="built_in">print</span>(resp.request)  <span class="comment">// original URL request</span></div><div class="line">	<span class="built_in">print</span>(resp.response) <span class="comment">// URL response</span></div><div class="line">	<span class="built_in">print</span>(resp.data)     <span class="comment">// server data</span></div><div class="line">	<span class="built_in">print</span>(resp.result)   <span class="comment">// result of response serialization</span></div><div class="line">	<span class="type">DDLogError</span>(resp.debugDescription)</div><div class="line">            </div><div class="line">	<span class="keyword">if</span> <span class="keyword">let</span> <span class="type">JSON</span> = resp.result.value &#123;</div><div class="line">		<span class="built_in">print</span>(<span class="string">"JSON: \(JSON)"</span>)</div><div class="line">                </div><div class="line">		<span class="keyword">let</span> account = <span class="type">JSON</span>.objectForKey(<span class="string">"msg"</span>)!</div><div class="line">			<span class="built_in">print</span>(<span class="string">"----------account = \(account)"</span>)           </div><div class="line">		&#125;</div><div class="line">&#125;</div><div class="line">        </div><div class="line">t.request(.<span class="type">POST</span>, <span class="string">"http://localhost:8080/test"</span>, parameters: [<span class="string">"account"</span>: <span class="string">"13800138000"</span>, <span class="string">"password"</span>: <span class="string">"123456"</span>]).responseJSON &#123; (resp:<span class="type">Response</span>&lt;<span class="type">AnyObject</span>, <span class="type">NSError</span>&gt;) <span class="keyword">in</span></div><div class="line">	<span class="built_in">print</span>(resp.request)  <span class="comment">// original URL request</span></div><div class="line">	<span class="built_in">print</span>(resp.response) <span class="comment">// URL response</span></div><div class="line">	<span class="built_in">print</span>(resp.data)     <span class="comment">// server data</span></div><div class="line">	<span class="built_in">print</span>(resp.result)   <span class="comment">// result of response serialization</span></div><div class="line">	<span class="type">DDLogError</span>(resp.debugDescription)</div><div class="line">            </div><div class="line">	<span class="keyword">if</span> <span class="keyword">let</span> <span class="type">JSON</span> = resp.result.value &#123;</div><div class="line">		<span class="type">DDLogWarn</span>(<span class="string">"JSON: \(JSON)"</span>)           </div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> t = <span class="type">NetworkController</span>.shareManager()</div><div class="line"> t.request(.<span class="type">GET</span>, <span class="string">"http://localhost:8080/test"</span>).responseJSON &#123; (resp: <span class="type">Response</span>&lt;<span class="type">AnyObject</span>, <span class="type">NSError</span>&gt;) <span class="keyword">in</span></div><div class="line">	<span class="built_in">print</span>(resp.request)  <span class="comment">// original URL request</span></div><div class="line">	<span class="built_in">print</span>(resp.response) <span class="comment">// URL response</span></div><div class="line">	<span class="built_in">print</span>(resp.data)     <span class="comment">// server data</span></div><div class="line">	<span class="built_in">print</span>(resp.result)   <span class="comment">// result of response serialization</span></div><div class="line">	<span class="type">DDLogError</span>(resp.debugDescription)</div><div class="line">            </div><div class="line">	<span class="keyword">if</span> <span class="keyword">let</span> <span class="type">JSON</span> = resp.result.value &#123;</div><div class="line">		<span class="built_in">print</span>(<span class="string">"JSON: <span class="subst">\(JSON)</span>"</span>)</div><div class="line">                </div><div class="line">		<span class="keyword">let</span> account = <span class="type">JSON</span>.objectForKey(<span class="string">"msg"</span>)!</div><div class="line">			<span class="built_in">print</span>(<span class="string">"----------account = <span class="subst">\(account)</span>"</span>)           </div><div class="line">		&#125;</div><div class="line">&#125;</div><div class="line">        </div><div class="line">t.request(.<span class="type">POST</span>, <span class="string">"http://localhost:8080/test"</span>, parameters: [<span class="string">"account"</span>: <span class="string">"13800138000"</span>, <span class="string">"password"</span>: <span class="string">"123456"</span>]).responseJSON &#123; (resp:<span class="type">Response</span>&lt;<span class="type">AnyObject</span>, <span class="type">NSError</span>&gt;) <span class="keyword">in</span></div><div class="line">	<span class="built_in">print</span>(resp.request)  <span class="comment">// original URL request</span></div><div class="line">	<span class="built_in">print</span>(resp.response) <span class="comment">// URL response</span></div><div class="line">	<span class="built_in">print</span>(resp.data)     <span class="comment">// server data</span></div><div class="line">	<span class="built_in">print</span>(resp.result)   <span class="comment">// result of response serialization</span></div><div class="line">	<span class="type">DDLogError</span>(resp.debugDescription)</div><div class="line">            </div><div class="line">	<span class="keyword">if</span> <span class="keyword">let</span> <span class="type">JSON</span> = resp.result.value &#123;</div><div class="line">		<span class="type">DDLogWarn</span>(<span class="string">"JSON: <span class="subst">\(JSON)</span>"</span>)           </div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>server端结果如下：</p>
 <p><img src="http://o98au0nko.bkt.clouddn.com/6.png" alt=""></p>
 <p>这里我们看到我们收到了连个请求，一个Get一个Post而且我们把Post数据中的account打印出来啦~~</p>
@@ -470,6 +470,24 @@ beego 框架搭建：先安装Golang，这个不会的可以看http://bartontang
                 </a>
               </span>
             
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/barton0205" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/home?trk=nav_responsive_tab_home" target="_blank" title="Linkedin">
+                  
+                    <i class="fa fa-fw fa-linkedin"></i>
+                  
+                  Linkedin
+                </a>
+              </span>
+            
           
         </div>
 
@@ -521,7 +539,7 @@ beego 框架搭建：先安装Golang，这个不会的可以看http://bartontang
 <div class="theme-info">
   主题 -
   <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Muse
+    NexT.Pisces
   </a>
 </div>
 
@@ -586,6 +604,13 @@ beego 框架搭建：先安装Golang，这个不会的可以看http://bartontang
 
   
   
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
 
   
   <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
