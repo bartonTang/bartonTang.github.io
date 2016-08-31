@@ -1,0 +1,621 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="最近遇见的几个坑SQLite，ViewController，SSH最近略忙，不单单是项目，也包括些自己的代码and忙着看一些书，多看看书总是好的，多少会有一些收获。记录下最近遇见的几个坑，防止以后有童鞋也进去了~起码能爬起来。
+SQLite做游戏的时候自己有整理过一个关于excel转sqlite文件的脚本，在游戏领域这个还是很重要的，就是对配置表做一个转换。有个字段叫code，它的值是类似001，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="最近遇见的几个坑SQLite，ViewController，SSH">
+<meta property="og:url" content="http://yoursite.com/2016/05/10/最近遇见的几个坑SQLite，ViewController，SSH/index.html">
+<meta property="og:site_name" content="BartonTang的博客">
+<meta property="og:description" content="最近遇见的几个坑SQLite，ViewController，SSH最近略忙，不单单是项目，也包括些自己的代码and忙着看一些书，多看看书总是好的，多少会有一些收获。记录下最近遇见的几个坑，防止以后有童鞋也进去了~起码能爬起来。
+SQLite做游戏的时候自己有整理过一个关于excel转sqlite文件的脚本，在游戏领域这个还是很重要的，就是对配置表做一个转换。有个字段叫code，它的值是类似001，">
+<meta property="og:updated_time" content="2016-08-31T11:57:20.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="最近遇见的几个坑SQLite，ViewController，SSH">
+<meta name="twitter:description" content="最近遇见的几个坑SQLite，ViewController，SSH最近略忙，不单单是项目，也包括些自己的代码and忙着看一些书，多看看书总是好的，多少会有一些收获。记录下最近遇见的几个坑，防止以后有童鞋也进去了~起码能爬起来。
+SQLite做游戏的时候自己有整理过一个关于excel转sqlite文件的脚本，在游戏领域这个还是很重要的，就是对配置表做一个转换。有个字段叫code，它的值是类似001，">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/05/10/最近遇见的几个坑SQLite，ViewController，SSH/"/>
+
+  <title> 最近遇见的几个坑SQLite，ViewController，SSH | BartonTang的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">BartonTang的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                最近遇见的几个坑SQLite，ViewController，SSH
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-05-10T19:50:00+08:00" content="2016-05-10">
+              2016-05-10
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/05/10/最近遇见的几个坑SQLite，ViewController，SSH/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/05/10/最近遇见的几个坑SQLite，ViewController，SSH/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="最近遇见的几个坑SQLite，ViewController，SSH"><a href="#最近遇见的几个坑SQLite，ViewController，SSH" class="headerlink" title="最近遇见的几个坑SQLite，ViewController，SSH"></a>最近遇见的几个坑SQLite，ViewController，SSH</h2><p>最近略忙，不单单是项目，也包括些自己的代码and忙着看一些书，多看看书总是好的，多少会有一些收获。记录下最近遇见的几个坑，防止以后有童鞋也进去了~起码能爬起来。</p>
+<h3 id="SQLite"><a href="#SQLite" class="headerlink" title="SQLite"></a>SQLite</h3><p>做游戏的时候自己有整理过一个关于excel转sqlite文件的脚本，在游戏领域这个还是很重要的，就是对配置表做一个转换。有个字段叫code，它的值是类似001，002…999 这样子的string在excel里肯定要设置成文本格式，那么问题来了，明明定义了code的类型是string，但是导出后SQLite却把它当做数字，剔除为1， 2…999，这个不是我们想要的，这个时候记得把类型<em>string改为text</em>， 那么世界一切将变得美好。</p>
+<h3 id="UIViewController"><a href="#UIViewController" class="headerlink" title="UIViewController"></a>UIViewController</h3><p>在iOS开发的时候经常会使用导航栏将ViewController压栈</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">[<span class="keyword">self</span>.navigationController pushViewController:vc animated:<span class="literal">YES</span>];</div></pre></td></tr></table></figure>
+<p>假如有多个ViewController跳转压栈，如果我要回到RootViewController有对应的方法，那假设要回到中间的某一个呢，ViewController1 –&gt; ViewController2 –&gt; ViewController3 –&gt; ViewController4<br>看如下代码：</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="built_in">UIViewController</span> *controller <span class="keyword">in</span> <span class="keyword">self</span>.navigationController.viewControllers) &#123;</div><div class="line">	<span class="keyword">if</span> ([controller isKindOfClass:[ViewController2 <span class="keyword">class</span>]]) &#123;</div><div class="line">		[<span class="keyword">self</span>.navigationController popToViewController:controller animated:<span class="literal">YES</span>];</div><div class="line">	｝</div><div class="line">｝</div></pre></td></tr></table></figure>
+<p>相当于遍历在栈中的ViewController,并用运行时方法判定是不是ViewController2，如果是就pop到这个ViewController</p>
+<h3 id="SSH"><a href="#SSH" class="headerlink" title="SSH"></a>SSH</h3><p>生成公钥密钥的方法:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa</div></pre></td></tr></table></figure>
+<p>生成出两个文件xx.key, xx.key.pub</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">barton@bartondeMacBook-Pro:~/Desktop$ ssh-keygen -t rsa</div><div class="line">Generating public/private rsa key pair.</div><div class="line">Enter file <span class="keyword">in</span> <span class="built_in">which</span> to save the key (/Users/barton/.ssh/id_rsa): barton.key</div><div class="line">Enter passphrase (empty <span class="keyword">for</span> no passphrase):</div><div class="line">Enter same passphrase again:</div><div class="line">Your identification has been saved <span class="keyword">in</span> barton.key.</div><div class="line">Your public key has been saved <span class="keyword">in</span> barton.key.pub.</div><div class="line">The key fingerprint is:</div><div class="line">SHA256:4QuQ7/YhFVVhcPhez59ox9nwtoxmvcE1oYZYwSQ3glg barton@bartondeMacBook-Pro.local</div><div class="line">The key<span class="string">'s randomart image is:</span></div><div class="line">+---[RSA 2048]----+</div><div class="line">|      oE.o=O=.   |</div><div class="line">|     o . .=+o    |</div><div class="line">|    o   o  o   . |</div><div class="line">|     o . oo o o .|</div><div class="line">|      o S. o + +.|</div><div class="line">|     . o .  o o =|</div><div class="line">|      + o     +==|</div><div class="line">|     . o .   =o**|</div><div class="line">|        .   +..=o|</div><div class="line">+----[SHA256]-----+</div></pre></td></tr></table></figure>
+<p>最终生成出两个文件：公钥:barton.key.pub 密钥:barton.key<br>密钥自己保存，公钥上传server的.ssh里~OK以后就可以直接ssh ip -i xx.key 直接登录server了，不用每次输入密码。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">公钥是:barton.key.pub，不要把秘钥给别人</div><div class="line">公钥是:barton.key.pub，不要把秘钥给别人</div><div class="line">公钥是:barton.key.pub，不要把秘钥给别人</div></pre></td></tr></table></figure>
+<p>重要的事情说三遍~！</p>
+<p>下面是百度出来的一段ssh生成证书的脚本，希望对大家有用：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/usr/bin/env bash</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"Generating RSA key pair ..."</span></div><div class="line"><span class="built_in">echo</span> <span class="string">"1024 RSA key: private_key.pem"</span></div><div class="line">openssl genrsa -out private_key.pem 1024</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"create certification require file: rsaCertReq.csr"</span></div><div class="line">openssl req -new -key private_key.pem -out rsaCertReq.csr</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"create certification using x509: rsaCert.crt"</span></div><div class="line">openssl x509 -req -days 3650 -in rsaCertReq.csr -signkey private_key.pem -out rsaCert.crt</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"create public_key.der For IOS"</span></div><div class="line">openssl x509 -outform der -in rsaCert.crt -out public_key.der</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"create private_key.p12 For IOS. Please remember your password. The password will be used in iOS."</span></div><div class="line">openssl pkcs12 -export -out private_key.p12 -inkey private_key.pem -in rsaCert.crt</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"create rsa_public_key.pem For Java"</span></div><div class="line">openssl rsa -in private_key.pem -out rsa_public_key.pem -pubout</div><div class="line"><span class="built_in">echo</span> <span class="string">"create pkcs8_private_key.pem For Java"</span></div><div class="line">openssl pkcs8 -topk8 -in private_key.pem -out pkcs8_private_key.pem -nocrypt</div><div class="line"></div><div class="line"><span class="built_in">echo</span> <span class="string">"finished."</span></div></pre></td></tr></table></figure>
+<p>坑先填到这，以后有遇到再继续填上~！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag">#iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/04/24/关于iOS的二维码生成和解析/" rel="next" title="关于iOS的二维码生成和解析">
+                <i class="fa fa-chevron-left"></i> 关于iOS的二维码生成和解析
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/23/iOS自定义可预览控件/" rel="prev" title="iOS自定义可预览控件">
+                iOS自定义可预览控件 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/05/10/最近遇见的几个坑SQLite，ViewController，SSH/"
+           data-title="最近遇见的几个坑SQLite，ViewController，SSH" data-url="http://yoursite.com/2016/05/10/最近遇见的几个坑SQLite，ViewController，SSH/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o98au0nko.bkt.clouddn.com/1.jpg"
+               alt="Barton" />
+          <p class="site-author-name" itemprop="name">Barton</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/bartonTang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#最近遇见的几个坑SQLite，ViewController，SSH"><span class="nav-number">1.</span> <span class="nav-text">最近遇见的几个坑SQLite，ViewController，SSH</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SQLite"><span class="nav-number">1.1.</span> <span class="nav-text">SQLite</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UIViewController"><span class="nav-number">1.2.</span> <span class="nav-text">UIViewController</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SSH"><span class="nav-number">1.3.</span> <span class="nav-text">SSH</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Barton</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"bartontang.duoshuo.com"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

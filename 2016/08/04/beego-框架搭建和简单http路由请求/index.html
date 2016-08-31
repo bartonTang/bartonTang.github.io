@@ -1,0 +1,643 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Go," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="beego 框架搭建和简单http路由请求闲来无事，学习Go的服务器框架beego。
+beego 框架搭建：先安装Golang，这个不会的可以看http://bartontang.github.io/2016/03/31/Golang-环境配置与安装/直接github下载bee工具
+1go get github.com/beego/bee
+安装完成后可通过bee命令来查看是否安装成功，这里不好的是">
+<meta property="og:type" content="article">
+<meta property="og:title" content="beego 框架搭建和简单http路由请求">
+<meta property="og:url" content="http://yoursite.com/2016/08/04/beego-框架搭建和简单http路由请求/index.html">
+<meta property="og:site_name" content="BartonTang的博客">
+<meta property="og:description" content="beego 框架搭建和简单http路由请求闲来无事，学习Go的服务器框架beego。
+beego 框架搭建：先安装Golang，这个不会的可以看http://bartontang.github.io/2016/03/31/Golang-环境配置与安装/直接github下载bee工具
+1go get github.com/beego/bee
+安装完成后可通过bee命令来查看是否安装成功，这里不好的是">
+<meta property="og:image" content="http://o98au0nko.bkt.clouddn.com/4.png">
+<meta property="og:image" content="http://o98au0nko.bkt.clouddn.com/5.png">
+<meta property="og:image" content="http://o98au0nko.bkt.clouddn.com/6.png">
+<meta property="og:image" content="http://o98au0nko.bkt.clouddn.com/7.png">
+<meta property="og:image" content="http://o98au0nko.bkt.clouddn.com/8.png">
+<meta property="og:updated_time" content="2016-08-31T12:10:43.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="beego 框架搭建和简单http路由请求">
+<meta name="twitter:description" content="beego 框架搭建和简单http路由请求闲来无事，学习Go的服务器框架beego。
+beego 框架搭建：先安装Golang，这个不会的可以看http://bartontang.github.io/2016/03/31/Golang-环境配置与安装/直接github下载bee工具
+1go get github.com/beego/bee
+安装完成后可通过bee命令来查看是否安装成功，这里不好的是">
+<meta name="twitter:image" content="http://o98au0nko.bkt.clouddn.com/4.png">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Muse',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/08/04/beego-框架搭建和简单http路由请求/"/>
+
+  <title> beego 框架搭建和简单http路由请求 | BartonTang的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">BartonTang的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                beego 框架搭建和简单http路由请求
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-04T20:03:52+08:00" content="2016-08-04">
+              2016-08-04
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/04/beego-框架搭建和简单http路由请求/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/04/beego-框架搭建和简单http路由请求/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="beego-框架搭建和简单http路由请求"><a href="#beego-框架搭建和简单http路由请求" class="headerlink" title="beego 框架搭建和简单http路由请求"></a>beego 框架搭建和简单http路由请求</h2><p>闲来无事，学习Go的服务器框架beego。</p>
+<h3 id="beego-框架搭建："><a href="#beego-框架搭建：" class="headerlink" title="beego 框架搭建："></a>beego 框架搭建：</h3><p>先安装Golang，这个不会的可以看<a href="http://bartontang.github.io/2016/03/31/Golang-环境配置与安装/" target="_blank" rel="external">http://bartontang.github.io/2016/03/31/Golang-环境配置与安装/</a><br>直接github下载bee工具</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">go get github.com/beego/bee</div></pre></td></tr></table></figure>
+<p>安装完成后可通过bee命令来查看是否安装成功，这里不好的是安装bee工具的时候木有任何进度显示不太科学，成功后如下所示：<br><img src="http://o98au0nko.bkt.clouddn.com/4.png" alt=""></p>
+<p>OK，接着我们需要在$GOPATH/src目录下new 一个新的project，切记执行bee new YourPorjectName 这个命令的时候必须是在<strong>GOPATH/src</strong>目录下</p>
+<p>工程创建完后直接执行，在工程目录下直接执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bee run</div></pre></td></tr></table></figure>
+<p>那么服务器就在8080端口启动起来了，如下所示：<br><img src="http://o98au0nko.bkt.clouddn.com/5.png" alt=""></p>
+<p>这里我把配置表里的8088监控端口打开了，具体的配置文件在 /conf/app.conf 文件里</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">appname = quickstart</div><div class="line">httpport = 8080</div><div class="line">runmode = dev</div><div class="line">EnableAdmin = <span class="literal">true</span></div><div class="line">AdminAddr = <span class="string">"localhost"</span></div><div class="line">AdminPort = 8088</div></pre></td></tr></table></figure>
+<p>这部分大家可以先忽略～现在服务器已经跑起来了，我们用网页打开<a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a> 就能看到一个beego的页面了。<br>好，安装就先到这里。接下来我们来看下路由和简单的http请求。</p>
+<h3 id="简单http路由请求"><a href="#简单http路由请求" class="headerlink" title="简单http路由请求:"></a>简单http路由请求:</h3><p>打开/routers/route.go文件</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> routers</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">	<span class="string">"quickstart/controllers"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</div><div class="line">	beego.Router(<span class="string">"/"</span>, &amp;controllers.MainController&#123;&#125;)</div><div class="line">	beego.Router(<span class="string">"/test"</span>, &amp;controllers.TestController&#123;&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里仿照default增加了一个url并把路由处理映射到TestController中</p>
+<p>接下来我们看一下TestController.go中的代码</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> controllers</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> TestController <span class="keyword">struct</span> &#123;</div><div class="line">	beego.Controller</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">Get</span><span class="params">()</span></span> &#123;</div><div class="line">	c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">		<span class="string">"msg"</span>:  <span class="string">"success"</span>,</div><div class="line">		<span class="string">"data"</span>: <span class="literal">false</span>,</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">Post</span><span class="params">()</span></span> &#123;</div><div class="line">	account := c.GetString(<span class="string">"account"</span>)</div><div class="line">	password := c.GetString(<span class="string">"password"</span>)</div><div class="line">	beego.Info(account)</div><div class="line"></div><div class="line">	c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">		<span class="string">"msg"</span>: <span class="string">"success"</span>,</div><div class="line">		<span class="string">"data"</span>: <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</div><div class="line">			<span class="string">"account"</span>:  account,</div><div class="line">			<span class="string">"password"</span>: password,</div><div class="line">		&#125;,</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里分别对Get和Post都做了处理~Get就直接返回一个Json数据给Client；Post呢则是接收Client传过来的两个Json字段account 和 password 并且将account 和 password再重新发回给Client。<br>beego.Info(account) 这句话是打印account出来</p>
+<p>下面就用swift做个小测试，下面这个是自己封装过的代码，先随便贴下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> t = <span class="type">NetworkController</span>.shareManager()</div><div class="line"> t.request(.<span class="type">GET</span>, <span class="string">"http://localhost:8080/test"</span>).responseJSON &#123; (resp: <span class="type">Response</span>&lt;<span class="type">AnyObject</span>, <span class="type">NSError</span>&gt;) <span class="keyword">in</span></div><div class="line">	<span class="built_in">print</span>(resp.request)  <span class="comment">// original URL request</span></div><div class="line">	<span class="built_in">print</span>(resp.response) <span class="comment">// URL response</span></div><div class="line">	<span class="built_in">print</span>(resp.data)     <span class="comment">// server data</span></div><div class="line">	<span class="built_in">print</span>(resp.result)   <span class="comment">// result of response serialization</span></div><div class="line">	<span class="type">DDLogError</span>(resp.debugDescription)</div><div class="line">            </div><div class="line">	<span class="keyword">if</span> <span class="keyword">let</span> <span class="type">JSON</span> = resp.result.value &#123;</div><div class="line">		<span class="built_in">print</span>(<span class="string">"JSON: <span class="subst">\(JSON)</span>"</span>)</div><div class="line">                </div><div class="line">		<span class="keyword">let</span> account = <span class="type">JSON</span>.objectForKey(<span class="string">"msg"</span>)!</div><div class="line">			<span class="built_in">print</span>(<span class="string">"----------account = <span class="subst">\(account)</span>"</span>)           </div><div class="line">		&#125;</div><div class="line">&#125;</div><div class="line">        </div><div class="line">t.request(.<span class="type">POST</span>, <span class="string">"http://localhost:8080/test"</span>, parameters: [<span class="string">"account"</span>: <span class="string">"13800138000"</span>, <span class="string">"password"</span>: <span class="string">"123456"</span>]).responseJSON &#123; (resp:<span class="type">Response</span>&lt;<span class="type">AnyObject</span>, <span class="type">NSError</span>&gt;) <span class="keyword">in</span></div><div class="line">	<span class="built_in">print</span>(resp.request)  <span class="comment">// original URL request</span></div><div class="line">	<span class="built_in">print</span>(resp.response) <span class="comment">// URL response</span></div><div class="line">	<span class="built_in">print</span>(resp.data)     <span class="comment">// server data</span></div><div class="line">	<span class="built_in">print</span>(resp.result)   <span class="comment">// result of response serialization</span></div><div class="line">	<span class="type">DDLogError</span>(resp.debugDescription)</div><div class="line">            </div><div class="line">	<span class="keyword">if</span> <span class="keyword">let</span> <span class="type">JSON</span> = resp.result.value &#123;</div><div class="line">		<span class="type">DDLogWarn</span>(<span class="string">"JSON: <span class="subst">\(JSON)</span>"</span>)           </div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>server端结果如下：</p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/6.png" alt=""></p>
+<p>这里我们看到我们收到了连个请求，一个Get一个Post而且我们把Post数据中的account打印出来啦~~</p>
+<p>client端结果如下：</p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/7.png" alt=""></p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/8.png" alt=""></p>
+<p>我们成功的获取了server回给client的json数据。</p>
+<p>先写这么多，后面会讲讲怎么将beego部署到阿里云上~！</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Go/" rel="tag">#Go</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/23/iOS自定义可预览控件/" rel="next" title="iOS自定义可预览控件">
+                <i class="fa fa-chevron-left"></i> iOS自定义可预览控件
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/08/07/beego-orm-操作-sqlite/" rel="prev" title="beego orm 操作(sqlite)">
+                beego orm 操作(sqlite) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/08/04/beego-框架搭建和简单http路由请求/"
+           data-title="beego 框架搭建和简单http路由请求" data-url="http://yoursite.com/2016/08/04/beego-框架搭建和简单http路由请求/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o98au0nko.bkt.clouddn.com/1.jpg"
+               alt="Barton" />
+          <p class="site-author-name" itemprop="name">Barton</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">10</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/bartonTang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#beego-框架搭建和简单http路由请求"><span class="nav-number">1.</span> <span class="nav-text">beego 框架搭建和简单http路由请求</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#beego-框架搭建："><span class="nav-number">1.1.</span> <span class="nav-text">beego 框架搭建：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#简单http路由请求"><span class="nav-number">1.2.</span> <span class="nav-text">简单http路由请求:</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Barton</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Muse
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"bartontang.duoshuo.com"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
