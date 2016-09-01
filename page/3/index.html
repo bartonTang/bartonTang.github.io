@@ -86,7 +86,7 @@
 
 <meta property="og:type" content="website">
 <meta property="og:title" content="BartonTang的博客">
-<meta property="og:url" content="http://yoursite.com/archives/page/2/index.html">
+<meta property="og:url" content="http://yoursite.com/page/3/index.html">
 <meta property="og:site_name" content="BartonTang的博客">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BartonTang的博客">
@@ -110,9 +110,9 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/archives/page/2/"/>
+  <link rel="canonical" href="http://yoursite.com/page/3/"/>
 
-  <title> 归档 | BartonTang的博客 </title>
+  <title> BartonTang的博客 </title>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
@@ -133,7 +133,9 @@
     
   
 
-  <div class="container one-collumn sidebar-position-left  page-archive  ">
+  <div class="container one-collumn sidebar-position-left 
+   page-home 
+ ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -210,218 +212,125 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
+  <section id="posts" class="posts-expand">
+    
+      
 
-  <section id="posts" class="posts-collapse">
-    <span class="archive-move-on"></span>
+  
+  
 
-    <span class="archive-page-counter">
-      
-      
-      
-        
-      
-      嗯..! 目前共计 11 篇日志。 继续努力。
-    </span>
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
 
     
+      <header class="post-header">
 
-      
-      
-      
-
-      
         
-        <div class="collection-title">
-          <h2 class="archive-year motion-element" id="archive-year-2016">2016</h2>
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
+                <a class="post-title-link" href="/2016/03/31/我的第一篇Blog文章（记录hexo搭建遇到的问题）/" itemprop="url">
+                  我的第一篇Blog文章（记录hexo搭建遇到的问题）
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-31T03:37:55+08:00" content="2016-03-31">
+              2016-03-31
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/31/我的第一篇Blog文章（记录hexo搭建遇到的问题）/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/31/我的第一篇Blog文章（记录hexo搭建遇到的问题）/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
         </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
       
       
 
       
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
         
-            <a class="post-title-link" href="/2016/05/10/最近遇见的几个坑SQLite，ViewController，SSH/" itemprop="url">
-              
-                <span itemprop="name">最近遇见的几个坑SQLite，ViewController，SSH</span>
-              
-            </a>
+          
+            <h2 id="我的第一篇Blog文章（记录hexo搭建遇到的问题）"><a href="#我的第一篇Blog文章（记录hexo搭建遇到的问题）" class="headerlink" title="我的第一篇Blog文章（记录hexo搭建遇到的问题）"></a>我的第一篇Blog文章（记录hexo搭建遇到的问题）</h2><p>稍微折腾了下hexo搭建博客，并发布到github page，立贴为证~！人生都是折腾，逼格必须要高~！<br>从0开始呢，必须百度or谷歌，感谢该文作者：</p>
+<blockquote>
+<p><a href="http://www.jianshu.com/p/44a1be815400" target="_blank" rel="external">http://www.jianshu.com/p/44a1be815400</a></p>
+</blockquote>
+<p>说下遇到的问题，其实按照上面的链接来搞一般是OK的</p>
+<p>1、 在安装hexo的时候，请尽量使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo npm install -g hexo</div></pre></td></tr></table></figure>
+<p>2、 安装完themes/yilia后对自己头像的设置, 找到/hexo/themes/yilia/source/img 这个路径，把你的头像<br>例如：1.jpg丢进去，然后配置对应themes/yilia/_config.yml</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#你的头像url</span></div><div class="line">avatar: /img/1.jpg</div></pre></td></tr></table></figure>
+<p>3、 将blog导入到github的时候,配置/hexo文件夹下的_config.yml</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">deploy:</div><div class="line">      <span class="built_in">type</span>: git</div><div class="line">      repository: https://github.com/YourAccount/YourAccount.github.io.git</div><div class="line">      branch: master</div></pre></td></tr></table></figure>
+
+          
         
-      </h1>
+      
+    </div>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-05-10T19:50:00+08:00"
-              content="2016-05-10" >
-          05-10
-        </time>
-      </div>
+    <div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
   </article>
 
 
-
     
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/04/24/关于iOS的二维码生成和解析/" itemprop="url">
-              
-                <span itemprop="name">关于iOS的二维码生成和解析</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-04-24T19:46:39+08:00"
-              content="2016-04-24" >
-          04-24
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/04/15/iOS-关于网络重定向的实现以及相关坑的记录/" itemprop="url">
-              
-                <span itemprop="name">iOS 关于网络重定向的实现以及相关坑的记录</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-04-15T08:35:45+08:00"
-              content="2016-04-15" >
-          04-15
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/04/08/Jenkins-搭建iOS持续集成环境/" itemprop="url">
-              
-                <span itemprop="name">Jenkins 搭建iOS持续集成环境</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-04-08T08:19:25+08:00"
-              content="2016-04-08" >
-          04-08
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
-      
-      
-      
-
-      
-      
-
-      
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
-
-      <h1 class="post-title">
-        
-            <a class="post-title-link" href="/2016/03/31/Golang-环境配置与安装/" itemprop="url">
-              
-                <span itemprop="name">Golang 环境配置与安装</span>
-              
-            </a>
-        
-      </h1>
-
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2016-03-31T08:10:07+08:00"
-              content="2016-03-31" >
-          03-31
-        </time>
-      </div>
-
-    </header>
-  </article>
-
-
-
-    
-
   </section>
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/archives/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/archives/">1</a><span class="page-number current">2</span><a class="page-number" href="/archives/page/3/">3</a><a class="extend next" rel="next" href="/archives/page/3/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span>
   </nav>
-
 
 
 
@@ -625,12 +534,6 @@
 
 
   
-  
-    <script type="text/javascript" id="motion.page.archive">
-      $('.archive-year').velocity('transition.slideLeftIn');
-    </script>
-  
-
 
   
 
