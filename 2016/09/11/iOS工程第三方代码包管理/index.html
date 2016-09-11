@@ -92,7 +92,7 @@
 <meta property="og:description" content="iOS工程第三方代码包管理在我们的实际开发过程中，多多少少会去引用别人成熟的代码库，自己完全造轮子这是不现实的。问题来了，怎么把这些第三方代码引入到自己的工程，以前咧，直接拖代码呗，恩~but这得多蛋疼呢~合适的管理代码包工具是很必要的。现有的在github上的项目主要支持的工具就是Cocoapods，还有一个就是Carthage。Cocoapods的教程非常之多，各位自行面向百度编程，面向谷歌编">
 <meta property="og:image" content="http://o98au0nko.bkt.clouddn.com/iOS_carthage_1.png">
 <meta property="og:image" content="http://o98au0nko.bkt.clouddn.com/iOS_carthage_2.png">
-<meta property="og:updated_time" content="2016-09-11T15:20:57.000Z">
+<meta property="og:updated_time" content="2016-09-11T15:28:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="iOS工程第三方代码包管理">
 <meta name="twitter:description" content="iOS工程第三方代码包管理在我们的实际开发过程中，多多少少会去引用别人成熟的代码库，自己完全造轮子这是不现实的。问题来了，怎么把这些第三方代码引入到自己的工程，以前咧，直接拖代码呗，恩~but这得多蛋疼呢~合适的管理代码包工具是很必要的。现有的在github上的项目主要支持的工具就是Cocoapods，还有一个就是Carthage。Cocoapods的教程非常之多，各位自行面向百度编程，面向谷歌编">
@@ -303,7 +303,7 @@
 <p>在 ~/Carthage/Build/iOS里会出现xxx.framework文件已经为你创建好了。<br>下图就是构件好的framwork显示：<br><img src="http://o98au0nko.bkt.clouddn.com/iOS_carthage_1.png" alt=""></p>
 <p>然后把framwork拖入到以下位置，并且构建一个run script，如图所示：<br><img src="http://o98au0nko.bkt.clouddn.com/iOS_carthage_2.png" alt=""></p>
 <p>最终你就可以在代码中直接import Alamofire 使用了~~</p>
-<h3 id="深坑"><a href="#深坑" class="headerlink" title="深坑"></a>深坑</h3><p>这里说个深坑：情景是升级了下Xcode。恩，git 拉项目代码下来，非常nice，模拟器运行的很好，烧真机吧~shit~！闪退~！你会发现报错，framework链接问题，没错，你看到的是链接问题~！模拟器很好，真机很蛋疼。开始以为是Cocoapods的问题，后来换成了Carthage，最后各种排查了各种。看到有人说证书配置，我在想没动过证书呀，进去钥匙串看一下，发现为什么之前所有的证书都报告来源于非常的证书颁发机构，最终发现苹果的Apple Worldwide Developer Relations Certification Authority 的证书没有了，应该是更新Xcode的时候被干掉了。。。恶心啊~~！</p>
+<h3 id="深坑"><a href="#深坑" class="headerlink" title="深坑"></a>深坑</h3><p>这里说个深坑：情景是升级了下Xcode。恩，git 拉项目代码下来，非常nice，模拟器运行的很好，烧真机吧~shit~！闪退~！你会发现报错，framework链接问题，没错，你看到的是链接问题~！模拟器很好，真机很蛋疼。开始以为是Cocoapods的问题，后来换成了Carthage，最后各种排查，这些问题在Stack Overflow上有写但都不适用我的情况，囧<del>！看到有人说可能是证书配置，我在想没动过证书呀，进去钥匙串看一下，发现为什么之前所有的证书都报告来源于非正常的证书颁发机构，最终发现苹果的Apple Worldwide Developer Relations Certification Authority 的证书没有了，应该是更新Xcode的时候被干掉了。。。恶心啊</del>！</p>
 <p>最终下载Apple Worldwide Developer Relations Certification Authority证书，打包真机，非常nice~~！！世界终于清静，该睡觉了~！</p>
 
       
