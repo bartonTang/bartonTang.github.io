@@ -235,6 +235,125 @@
             
               
                 
+                <a class="post-title-link" href="/2016/09/11/iOS工程第三方代码包管理/" itemprop="url">
+                  iOS工程第三方代码包管理
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-09-11T20:39:23+08:00" content="2016-09-11">
+              2016-09-11
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/09/11/iOS工程第三方代码包管理/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/11/iOS工程第三方代码包管理/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="iOS工程第三方代码包管理"><a href="#iOS工程第三方代码包管理" class="headerlink" title="iOS工程第三方代码包管理"></a>iOS工程第三方代码包管理</h2><p>在我们的实际开发过程中，多多少少会去引用别人成熟的代码库，自己完全造轮子这是不现实的。问题来了，怎么把这些第三方代码引入到自己的工程，以前咧，直接拖代码呗，恩~but这得多蛋疼呢~合适的管理代码包工具是很必要的。<br>现有的在github上的项目主要支持的工具就是Cocoapods，还有一个就是Carthage。Cocoapods的教程非常之多，各位自行面向百度编程，面向谷歌编程 or RTFM。</p>
+<h3 id="Carthage"><a href="#Carthage" class="headerlink" title="Carthage"></a>Carthage</h3><p>Carthage的github主页为  <a href="https://github.com/Carthage/Carthage.git" target="_blank" rel="external">https://github.com/Carthage/Carthage.git</a> </p>
+<p>CocoaPods会直接创建和修改项目的workspace配置，而Carthage的特点是灵活，耦合度不高，集成时不需要集成相应的project，不需要创建workspace，只要依赖打包好的framework文件就可以了。</p>
+<h3 id="安装使用Carthage"><a href="#安装使用Carthage" class="headerlink" title="安装使用Carthage"></a>安装使用Carthage</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo brew install carthage</div></pre></td></tr></table></figure>
+<p>安装完成后，执行carthage version<br>即可看到carthage的版本</p>
+<p>接下来就是通过carthage管理第三方库。<br>cd到你的项目位置，然后使用touch Carfile，创建一个Carfile文件。<br>使用Xcode打开Carfile，编辑你需要加入的第三方库，要看清楚该第三方库是否支持Carfile哦，一般比较正式的包都会支持的。<br>在文件中加入：</p>
+<blockquote>
+<p>github “Alamofire/Alamofire” ~&gt; 3.0</p>
+</blockquote>
+<p>版本含义：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">~&gt; 3.0 表示使用版本3.0以上但是低于4.0的最新版本，如3.5, 3.9</div><div class="line"></div><div class="line">&gt;== 3.0 表示使用3.0版本</div><div class="line"></div><div class="line">&gt;= 3.0表示使用3.0或更高的版本</div></pre></td></tr></table></figure>
+<p>如果你没有指明版本号，则会自动使用最新的版本。<br>写好后保存文件，执行以下命令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">carthage update --platform iOS</div></pre></td></tr></table></figure>
+<p>carthage会为你下载和编译所需要的第三方库，当命令执行完毕，在你的项目文件夹中会创建一个名为Carthage的文件夹</p>
+<p>在 ~/Carthage/Build/iOS里会出现xxx.framework文件已经为你创建好了。<br>下图就是构件好的framwork显示：<br><img src="http://o98au0nko.bkt.clouddn.com/iOS_carthage_1.png" alt=""></p>
+<p>然后把framwork拖入到以下位置，并且构建一个run script，如图所示：<br><img src="http://o98au0nko.bkt.clouddn.com/iOS_carthage_2.png" alt=""></p>
+<p>最终你就可以在代码中直接import Alamofire 使用了~~</p>
+<h3 id="深坑"><a href="#深坑" class="headerlink" title="深坑"></a>深坑</h3><p>这里说个深坑：情景是升级了下Xcode。恩，git 拉项目代码下来，非常nice，模拟器运行的很好，烧真机吧~shit~！闪退~！你会发现报错，framework链接问题，没错，你看到的是链接问题~！模拟器很好，真机很蛋疼。开始以为是Cocoapods的问题，后来换成了Carthage，最后各种排查了各种。看到有人说证书配置，我在想没动过证书呀，进去钥匙串看一下，发现为什么之前所有的证书都报告来源于非常的证书颁发机构，最终发现苹果的Apple Worldwide Developer Relations Certification Authority 的证书没有了，应该是更新Xcode的时候被干掉了。。。恶心啊~~！</p>
+<p>最终下载Apple Worldwide Developer Relations Certification Authority证书，打包真机，非常nice~~！！世界终于清静，该睡觉了~！</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/09/01/iOS-使用MJRefresh增加UItableView的上拉刷新，加载更多数据/" itemprop="url">
                   iOS 使用MJRefresh增加UITableView的上拉刷新，加载更多数据
                 </a>
@@ -678,118 +797,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/06/23/iOS自定义可预览控件/" itemprop="url">
-                  iOS自定义可预览控件
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-06-23T19:58:37+08:00" content="2016-06-23">
-              2016-06-23
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/06/23/iOS自定义可预览控件/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/06/23/iOS自定义可预览控件/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="iOS自定义可预览控件"><a href="#iOS自定义可预览控件" class="headerlink" title="iOS自定义可预览控件"></a>iOS自定义可预览控件</h2><p>iOS的编辑器还是不错的，但是自定义的UI控件如果能够可预览就更加nice了，所见即所得！当然也有些坑和感觉需要完善的地方，但相信Apple会对Storyboard做出持续性的更新和改进。</p>
-<p>要做到UI控件可预览那么就需要了解IBDesignable和IBInspectable<br>新建一个工程，先随便写点代码吧~直接贴在下面了，无非就是一个View的圆角和描边颜色，宽度的设置</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> UIKit</div><div class="line"></div><div class="line"><span class="meta">@IBDesignable</span> <span class="class"><span class="keyword">class</span> <span class="title">BTCustomView</span>: <span class="title">UIView</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">// MARK: setter</span></div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> cornerRadius: <span class="type">CGFloat</span> = <span class="number">0.0</span> &#123;</div><div class="line">        <span class="keyword">didSet</span> &#123;</div><div class="line">            <span class="keyword">self</span>.layer.cornerRadius = cornerRadius</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> borderColor: <span class="type">UIColor</span> = <span class="type">UIColor</span>.clearColor() &#123;</div><div class="line">        <span class="keyword">didSet</span> &#123;</div><div class="line">            <span class="keyword">self</span>.layer.borderColor = borderColor.<span class="type">CGColor</span></div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="meta">@IBInspectable</span> <span class="keyword">var</span> borderWidth: <span class="type">CGFloat</span> = <span class="number">0.0</span> &#123;</div><div class="line">        <span class="keyword">didSet</span> &#123;</div><div class="line">            <span class="keyword">self</span>.layer.borderWidth = borderWidth</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">override</span> <span class="keyword">init</span>(frame: <span class="type">CGRect</span>) &#123;</div><div class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>(frame: frame)</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="keyword">required</span> <span class="keyword">init</span>(coder aDecoder: <span class="type">NSCoder</span>) &#123;</div><div class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>(coder: aDecoder)!</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>@IBDesignable 表示改类是可被IB预览的<br>@IBInspectable 表示改属性可在IB编辑器里设置</p>
-<p>接下来在Main.storyboard中随便拉一个UIView出来做测试</p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/1.png" alt=""></p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/2.png" alt=""></p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/3.png" alt=""></p>
-<p>从上面我们可以看出这样子我们就能够很容易定制一个自己的UI，非常的方便。</p>
-<p>如果是Objective-C又是怎么样的呢，下面附上Objective-C的代码</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">&lt;UIKit/UIKit.h&gt;</span></span></div><div class="line">IB_DESIGNABLE</div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">CustomView</span> : <span class="title">UIView</span></span></div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>)IBInspectable <span class="built_in">CGFloat</span> cornerRadius;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="meta">#import <span class="meta-string">"CustomView.h"</span></span></div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">CustomView</span></span></div><div class="line">- (<span class="keyword">nullable</span> <span class="keyword">instancetype</span>)initWithCoder:(<span class="built_in">NSCoder</span> *)aDecoder &#123;</div><div class="line">    <span class="keyword">return</span> [<span class="keyword">super</span> initWithCoder:aDecoder];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)awakeFromNib &#123;</div><div class="line">    [<span class="keyword">super</span> awakeFromNib];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)setCornerRadius:(<span class="built_in">CGFloat</span>)cornerRadius &#123;</div><div class="line">    _cornerRadius = cornerRadius;</div><div class="line">    <span class="keyword">self</span>.layer.cornerRadius = _cornerRadius;</div><div class="line">    <span class="keyword">self</span>.layer.masksToBounds = @YES;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>注意点：<br><strong>现在还不支持类似NSArray之类的复杂类型，so sad！一定要重写initWithCoder方法</strong><br>好，先这样希望大家有好的自己定制的UI共同分享，共同学习~！</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -835,7 +842,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

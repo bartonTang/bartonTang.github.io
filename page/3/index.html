@@ -235,6 +235,115 @@
             
               
                 
+                <a class="post-title-link" href="/2016/03/31/Golang-环境配置与安装/" itemprop="url">
+                  Golang 环境配置与安装
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-03-31T08:10:07+08:00" content="2016-03-31">
+              2016-03-31
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/03/31/Golang-环境配置与安装/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/03/31/Golang-环境配置与安装/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="Golang-环境配置与安装"><a href="#Golang-环境配置与安装" class="headerlink" title="Golang 环境配置与安装"></a>Golang 环境配置与安装</h2><p>不知道什么叫Golang的请自行谷歌，对于不知道Go的程序猿，请面壁。虽然一直做着前端开发，但多学习一些东西总是好的，只讲和记录一些简单的东西，以备以后需要不会忘记，只针对Mac。<br><a href="http://www.golangtc.com/download" target="_blank" rel="external">Go下载地址</a><br>因为现在是Version 1.6，直接下载<br>go1.6.darwin-amd64.tar.gz<br>丢到自己的Document路径下解压即可，这个路径其实可根据个人喜好，但配置GOPATH和GOROOT的时候得配对<br>在.bash_profile里设置路径</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="built_in">export</span> GOPATH=/Applications/Go</div><div class="line"><span class="built_in">export</span> GOROOT=~/Documents/go</div><div class="line"><span class="built_in">export</span> PATH=<span class="variable">$&#123;PATH&#125;</span>:<span class="variable">$GOPATH</span>/bin:<span class="variable">$GOROOT</span>/bin</div></pre></td></tr></table></figure>
+<p>保存.bash_profile文件，重启终端，当然用source 命令也行。<br>对于不知道.bash_profile文件的童鞋，解释两句：这个就类似Windows里对系统路径的配置的一个文件，找不到在哪儿的，请谷歌！<br>命令行执行go version 命令，如果安装成功那么会显示当前的go版本。</p>
+<p>接下来就是代码编辑环境的问题了，对于这个每个人有不同的答案。sublime text装个gosublime 的插件包，安装后记得设置：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">   <span class="string">"env"</span>: &#123;</div><div class="line">        <span class="string">"GOPATH"</span>: <span class="string">"<span class="variable">$HOME</span>/Applitaions/Go"</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在LiteIDE中，要设置</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">GOROOT=<span class="variable">$HOME</span>/Documents/go</div></pre></td></tr></table></figure>
+<p>然后就开始编写go，在/Applitaions/Go下新建三个文件夹src,pkg,bin~代码必须在src下。</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">	fmt.Println(<span class="string">"Hello Golang~!"</span>)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/03/31/我的第一篇Blog文章（记录hexo搭建遇到的问题）/" itemprop="url">
                   我的第一篇Blog文章（记录hexo搭建遇到的问题）
                 </a>
@@ -370,7 +479,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">11</span>
+              <span class="site-state-item-count">12</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
