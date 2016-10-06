@@ -235,6 +235,133 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/04/beego-框架搭建和简单http路由请求/" itemprop="url">
+                  beego 框架搭建和简单http路由请求
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-04T20:03:52+08:00" content="2016-08-04">
+              2016-08-04
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/04/beego-框架搭建和简单http路由请求/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/04/beego-框架搭建和简单http路由请求/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="beego-框架搭建和简单http路由请求"><a href="#beego-框架搭建和简单http路由请求" class="headerlink" title="beego 框架搭建和简单http路由请求"></a>beego 框架搭建和简单http路由请求</h2><p>闲来无事，学习Go的服务器框架beego。</p>
+<h3 id="beego-框架搭建："><a href="#beego-框架搭建：" class="headerlink" title="beego 框架搭建："></a>beego 框架搭建：</h3><p>先安装Golang，这个不会的可以看<a href="http://bartontang.github.io/2016/03/31/Golang-环境配置与安装/" target="_blank" rel="external">http://bartontang.github.io/2016/03/31/Golang-环境配置与安装/</a><br>直接github下载bee工具</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">go get github.com/beego/bee</div></pre></td></tr></table></figure>
+<p>安装完成后可通过bee命令来查看是否安装成功，这里不好的是安装bee工具的时候木有任何进度显示不太科学，成功后如下所示：<br><img src="http://o98au0nko.bkt.clouddn.com/4.png" alt=""></p>
+<p>OK，接着我们需要在$GOPATH/src目录下new 一个新的project，切记执行bee new YourPorjectName 这个命令的时候必须是在<strong>GOPATH/src</strong>目录下</p>
+<p>工程创建完后直接执行，在工程目录下直接执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bee run</div></pre></td></tr></table></figure>
+<p>那么服务器就在8080端口启动起来了，如下所示：<br><img src="http://o98au0nko.bkt.clouddn.com/5.png" alt=""></p>
+<p>这里我把配置表里的8088监控端口打开了，具体的配置文件在 /conf/app.conf 文件里</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">appname = quickstart</div><div class="line">httpport = 8080</div><div class="line">runmode = dev</div><div class="line">EnableAdmin = <span class="literal">true</span></div><div class="line">AdminAddr = <span class="string">"localhost"</span></div><div class="line">AdminPort = 8088</div></pre></td></tr></table></figure>
+<p>这部分大家可以先忽略～现在服务器已经跑起来了，我们用网页打开<a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a> 就能看到一个beego的页面了。<br>好，安装就先到这里。接下来我们来看下路由和简单的http请求。</p>
+<h3 id="简单http路由请求"><a href="#简单http路由请求" class="headerlink" title="简单http路由请求:"></a>简单http路由请求:</h3><p>打开/routers/route.go文件</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> routers</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">	<span class="string">"quickstart/controllers"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</div><div class="line">	beego.Router(<span class="string">"/"</span>, &amp;controllers.MainController&#123;&#125;)</div><div class="line">	beego.Router(<span class="string">"/test"</span>, &amp;controllers.TestController&#123;&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里仿照default增加了一个url并把路由处理映射到TestController中</p>
+<p>接下来我们看一下TestController.go中的代码</p>
+<figure class="highlight golang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> controllers</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> TestController <span class="keyword">struct</span> &#123;</div><div class="line">	beego.Controller</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">Get</span><span class="params">()</span></span> &#123;</div><div class="line">	c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">		<span class="string">"msg"</span>:  <span class="string">"success"</span>,</div><div class="line">		<span class="string">"data"</span>: <span class="literal">false</span>,</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">Post</span><span class="params">()</span></span> &#123;</div><div class="line">	account := c.GetString(<span class="string">"account"</span>)</div><div class="line">	password := c.GetString(<span class="string">"password"</span>)</div><div class="line">	beego.Info(account)</div><div class="line"></div><div class="line">	c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">		<span class="string">"msg"</span>: <span class="string">"success"</span>,</div><div class="line">		<span class="string">"data"</span>: <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</div><div class="line">			<span class="string">"account"</span>:  account,</div><div class="line">			<span class="string">"password"</span>: password,</div><div class="line">		&#125;,</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里分别对Get和Post都做了处理~Get就直接返回一个Json数据给Client；Post呢则是接收Client传过来的两个Json字段account 和 password 并且将account 和 password再重新发回给Client。<br>beego.Info(account) 这句话是打印account出来</p>
+<p>下面就用swift做个小测试，下面这个是自己封装过的代码，先随便贴下：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> t = <span class="type">NetworkController</span>.shareManager()</div><div class="line"> t.request(.<span class="type">GET</span>, <span class="string">"http://localhost:8080/test"</span>).responseJSON &#123; (resp: <span class="type">Response</span>&lt;<span class="type">AnyObject</span>, <span class="type">NSError</span>&gt;) <span class="keyword">in</span></div><div class="line">	<span class="built_in">print</span>(resp.request)  <span class="comment">// original URL request</span></div><div class="line">	<span class="built_in">print</span>(resp.response) <span class="comment">// URL response</span></div><div class="line">	<span class="built_in">print</span>(resp.data)     <span class="comment">// server data</span></div><div class="line">	<span class="built_in">print</span>(resp.result)   <span class="comment">// result of response serialization</span></div><div class="line">	<span class="type">DDLogError</span>(resp.debugDescription)</div><div class="line">            </div><div class="line">	<span class="keyword">if</span> <span class="keyword">let</span> <span class="type">JSON</span> = resp.result.value &#123;</div><div class="line">		<span class="built_in">print</span>(<span class="string">"JSON: <span class="subst">\(JSON)</span>"</span>)</div><div class="line">                </div><div class="line">		<span class="keyword">let</span> account = <span class="type">JSON</span>.objectForKey(<span class="string">"msg"</span>)!</div><div class="line">			<span class="built_in">print</span>(<span class="string">"----------account = <span class="subst">\(account)</span>"</span>)           </div><div class="line">		&#125;</div><div class="line">&#125;</div><div class="line">        </div><div class="line">t.request(.<span class="type">POST</span>, <span class="string">"http://localhost:8080/test"</span>, parameters: [<span class="string">"account"</span>: <span class="string">"13800138000"</span>, <span class="string">"password"</span>: <span class="string">"123456"</span>]).responseJSON &#123; (resp:<span class="type">Response</span>&lt;<span class="type">AnyObject</span>, <span class="type">NSError</span>&gt;) <span class="keyword">in</span></div><div class="line">	<span class="built_in">print</span>(resp.request)  <span class="comment">// original URL request</span></div><div class="line">	<span class="built_in">print</span>(resp.response) <span class="comment">// URL response</span></div><div class="line">	<span class="built_in">print</span>(resp.data)     <span class="comment">// server data</span></div><div class="line">	<span class="built_in">print</span>(resp.result)   <span class="comment">// result of response serialization</span></div><div class="line">	<span class="type">DDLogError</span>(resp.debugDescription)</div><div class="line">            </div><div class="line">	<span class="keyword">if</span> <span class="keyword">let</span> <span class="type">JSON</span> = resp.result.value &#123;</div><div class="line">		<span class="type">DDLogWarn</span>(<span class="string">"JSON: <span class="subst">\(JSON)</span>"</span>)           </div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>server端结果如下：</p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/6.png" alt=""></p>
+<p>这里我们看到我们收到了连个请求，一个Get一个Post而且我们把Post数据中的account打印出来啦~~</p>
+<p>client端结果如下：</p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/7.png" alt=""></p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/8.png" alt=""></p>
+<p>我们成功的获取了server回给client的json数据。</p>
+<p>先写这么多，后面会讲讲怎么将beego部署到阿里云上~！</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/06/23/iOS自定义可预览控件/" itemprop="url">
                   iOS自定义可预览控件
                 </a>
@@ -656,151 +783,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/08/Jenkins-搭建iOS持续集成环境/" itemprop="url">
-                  Jenkins 搭建iOS持续集成环境
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-08T08:19:25+08:00" content="2016-04-08">
-              2016-04-08
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/08/Jenkins-搭建iOS持续集成环境/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/08/Jenkins-搭建iOS持续集成环境/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="Jenkins-搭建iOS持续集成环境"><a href="#Jenkins-搭建iOS持续集成环境" class="headerlink" title="Jenkins 搭建iOS持续集成环境"></a>Jenkins 搭建iOS持续集成环境</h2><h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>那天老大和我说iOS能不能弄个持续集成环境，开始听到这个名词的时候表示好像有点高级，不懂~！后来说到Maven和Ant，大概懂了，自动打包嘛。但再具体下来看下别人的blog之类的时候发现不单单是自动打包了，还包含一些开发的思想在内。</p>
-<h3 id="什么是持续集成环境？"><a href="#什么是持续集成环境？" class="headerlink" title="什么是持续集成环境？"></a>什么是持续集成环境？</h3><p>持续集成是一种软件开发实践。在持续集成中，团队成员频繁集成他们的工作成果，一般每人每天至少集成一次，也可以多次。每次集成会经过自动构建（包括自动测试）的检验，以尽快发现集成错误。许多团队发现这种方法可以显著减少集成引起的问题，并可以加快团队合作软件开发的速度。</p>
-<p>以前玩cocos的时候测试是给测试配台测试mac机器，然后我在那折腾半天把那台的Mac环境配好，然后给他们个SVN让他们update代码，然后自己打开Xcode运行程序。这样子有好也有不好，好的是崩溃了能第一时间保留现场给开发人员fix，但有时候也觉得麻烦，黑一下C++，崩溃。现在搞应用感觉这种bug很少会遇见啦，可能还不够深入吧。</p>
-<p>跑题了，那么目标就是让开发的代码提交到git后，项目组的其他人员能随时构建一个最新的包安装到自己的手机上，每次找程序猿也可以，但太花时间，构建了一个持续集成环境后，不用每次程序猿去改工程配置，不停滴切换各个版本。</p>
-<h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><p>Xcode 7.2<br>Mac OS X 10.11.1</p>
-<h3 id="Jenkins"><a href="#Jenkins" class="headerlink" title="Jenkins"></a>Jenkins</h3><p>Jenkins 是一个开源项目，提供了一种易于使用的持续集成系统，使开发者从繁杂的集成中解脱出来，专注于更为重要的业务逻辑实现上。同时 Jenkins 能实施监控集成中存在的错误，提供详细的日志文件和提醒功能，还能用图表的形式形象地展示项目构建的趋势和稳定性。非常nice的一个东西，自己慢慢体会</p>
-<h3 id="XCTool"><a href="#XCTool" class="headerlink" title="XCTool"></a>XCTool</h3><p>XCTool这个是facebook搞的一个集成工具，用来编译和打包iOS程序。我们需要用它来帮助我们在命令行自动构建项目等。</p>
-<h3 id="构建步骤"><a href="#构建步骤" class="headerlink" title="构建步骤"></a>构建步骤</h3><h4 id="1、安装Ruby-RVM-Cocoapods"><a href="#1、安装Ruby-RVM-Cocoapods" class="headerlink" title="1、安装Ruby,RVM,Cocoapods"></a>1、安装Ruby,RVM,Cocoapods</h4><p>关于这部分的安转下面的这个链接将会非常详尽的告诉你，感谢大神的blog<br><a href="http://www.cnblogs.com/jys509/p/4839803.html" target="_blank" rel="external">iOS CocoaPods安装和使用图解</a></p>
-<h4 id="2、安装Homebrew"><a href="#2、安装Homebrew" class="headerlink" title="2、安装Homebrew"></a>2、安装Homebrew</h4><p>Homebrew是Mac下著名的包管理工具，玩过Centos的童鞋都知道yum吧，你就把它看成是Mac下的yum<br>终端输入</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ruby <span class="_">-e</span> <span class="string">"<span class="variable">$(curl -fsSL https://raw.github.com/Homebrew/homebrew/go/install)</span>"</span></div></pre></td></tr></table></figure>
-<p>检查安装环境</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew doctor</div></pre></td></tr></table></figure>
-<h4 id="3、安装Jenkins和XCTool"><a href="#3、安装Jenkins和XCTool" class="headerlink" title="3、安装Jenkins和XCTool"></a>3、安装Jenkins和XCTool</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install jenkins</div></pre></td></tr></table></figure>
-<p>如果机子上没有1.7+的jdk，会报错，没关系，根据提示来进行依赖项的安装。</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install Caskroom/cask/java</div></pre></td></tr></table></figure>
-<p>然后再执行brew install jenkins，这会应该就安装成功了。我们通过下面的命令启动Jenkins</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">java -jar /usr/<span class="built_in">local</span>/opt/jenkins/libexec/jenkins.war</div></pre></td></tr></table></figure>
-<p>然后我们用浏览器打开<a href="http://localhost:8080" target="_blank" rel="external">本地Jenkins</a></p>
-<p>来打开Jenkins，如果页面打开成功，恭喜你已经将Jenkins成功安装到你的本机。</p>
-<p>安装XCTool</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">brew install xctool</div></pre></td></tr></table></figure>
-<p>非常easy，安装完后可以使用xctool -help来查看相应的命令来获取帮助。</p>
-<h4 id="4、配置Jenkins"><a href="#4、配置Jenkins" class="headerlink" title="4、配置Jenkins"></a>4、配置Jenkins</h4><p>首先项目是托管到git上的，那么我们就得通过Jenkins里的</p>
-<blockquote>
-<p>系统配置-&gt;管理插件</p>
-</blockquote>
-<p>安装下面几个插件，当然也可以根据项目具体情况进行安装</p>
-<blockquote>
-<p>Git Server Plugin #Git的支持，如果用svn就不需要了<br>Git Client Plugin #Git的支持，如果用svn就补需要了<br>Git Plugin</p>
-</blockquote>
-<p>主要就这三个，如果是svn就直接忽略吧~</p>
-<p>我们就可以新建个项目，然后在项目配置里对项目内容进行配置，说几个重要的地方</p>
-<blockquote>
-<p>源码管理，选用的是git<br>Repository URL 就是你的远程git仓库<br>Credentials 这个就是让你输入git仓库的账号密码</p>
-</blockquote>
-<p>勾上Run the build in a RVM-managed environment 选项</p>
-<p>构建下的shell脚本最为重要</p>
-<p>直接贴shell吧</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#!/bin/sh</span></div><div class="line"><span class="built_in">cd</span> <span class="variable">$WORKSPACE</span>/YourProjectDir</div><div class="line">buildDay=$(date +%Y%m%d)</div><div class="line">buildTime=$(date +%Y%m%d%H%M)</div><div class="line"></div><div class="line">buildPath=<span class="string">"DEBUG/<span class="variable">$&#123;buildDay&#125;</span>/YourProjectName_debug_<span class="variable">$&#123;buildTime&#125;</span>.xcarchive"</span></div><div class="line">ipaName=<span class="string">"DEBUG/<span class="variable">$&#123;buildDay&#125;</span>/YourProjectName_debug_<span class="variable">$&#123;buildTime&#125;</span>.ipa"</span></div><div class="line"><span class="built_in">pwd</span></div><div class="line">/usr/<span class="built_in">local</span>/bin/xctool -workspace YourProjectName.xcworkspace -scheme YourProjectName -sdk iphoneos9.2 clean archive -archivePath <span class="variable">$&#123;buildPath&#125;</span></div><div class="line">xcodebuild -exportArchive -exportFormat IPA -archivePath <span class="variable">$&#123;buildPath&#125;</span> -exportPath <span class="variable">$&#123;ipaName&#125;</span> -exportProvisioningProfile <span class="string">'iOS Team Provisioning Profile: *'</span></div></pre></td></tr></table></figure>
-<p>首先就是用XCTool进行编译打包成archive，然后再有Xcode自带的命令行xcodebuild将archive文件打包成一个ipa<br>这个shell各位大神可根据自己的实际情况进行更改，至此，一个简易的持续集成环境就搭建完成了。当然还有很多东西要做，首先一个就是让别人能访问到你的这个Jenkins网页，那么这些只需要对</p>
-<blockquote>
-<p>~/Library/LaunchAgents/homebrew.mxcl.jenkins.plist</p>
-</blockquote>
-<p>修改–httpListenAddress=127.0.0.1改成自己的局域网IP</p>
-<p>这样子别人就可以访问到你的网页了。进入项目在右边侧栏点击立即构建，enjoy it~~！^_^</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -846,7 +828,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">12</span>
+              <span class="site-state-item-count">13</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

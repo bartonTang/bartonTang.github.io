@@ -1,0 +1,639 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="更好的模式，更轻量级的UITableView在软件开发过程中我们经常会运用各类设计模式来使得代码节藕，让代码看起来更整洁，Gof的23种设计模式，值得一看。其他先不谈，先聊聊经常遇到包括去面试的时候面试官会和你聊的MVC等。
+Model-View-ControllerMVC全名是Model View Controller，是模型(model)－视图(view)－控制器(controller)的缩写">
+<meta property="og:type" content="article">
+<meta property="og:title" content="更好的模式，更轻量级的UITableView">
+<meta property="og:url" content="http://yoursite.com/2016/10/06/更好的模式，更轻量级的UITableView/index.html">
+<meta property="og:site_name" content="BartonTang的博客">
+<meta property="og:description" content="更好的模式，更轻量级的UITableView在软件开发过程中我们经常会运用各类设计模式来使得代码节藕，让代码看起来更整洁，Gof的23种设计模式，值得一看。其他先不谈，先聊聊经常遇到包括去面试的时候面试官会和你聊的MVC等。
+Model-View-ControllerMVC全名是Model View Controller，是模型(model)－视图(view)－控制器(controller)的缩写">
+<meta property="og:updated_time" content="2016-10-06T14:22:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="更好的模式，更轻量级的UITableView">
+<meta name="twitter:description" content="更好的模式，更轻量级的UITableView在软件开发过程中我们经常会运用各类设计模式来使得代码节藕，让代码看起来更整洁，Gof的23种设计模式，值得一看。其他先不谈，先聊聊经常遇到包括去面试的时候面试官会和你聊的MVC等。
+Model-View-ControllerMVC全名是Model View Controller，是模型(model)－视图(view)－控制器(controller)的缩写">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2016/10/06/更好的模式，更轻量级的UITableView/"/>
+
+  <title> 更好的模式，更轻量级的UITableView | BartonTang的博客 </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">BartonTang的博客</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                更好的模式，更轻量级的UITableView
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-10-06T20:36:19+08:00" content="2016-10-06">
+              2016-10-06
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/10/06/更好的模式，更轻量级的UITableView/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/06/更好的模式，更轻量级的UITableView/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="更好的模式，更轻量级的UITableView"><a href="#更好的模式，更轻量级的UITableView" class="headerlink" title="更好的模式，更轻量级的UITableView"></a>更好的模式，更轻量级的UITableView</h2><p>在软件开发过程中我们经常会运用各类设计模式来使得代码节藕，让代码看起来更整洁，Gof的23种设计模式，值得一看。其他先不谈，先聊聊经常遇到包括去面试的时候面试官会和你聊的MVC等。</p>
+<h3 id="Model-View-Controller"><a href="#Model-View-Controller" class="headerlink" title="Model-View-Controller"></a>Model-View-Controller</h3><p>MVC全名是Model View Controller，是模型(model)－视图(view)－控制器(controller)的缩写，一种软件设计典范，用一种业务逻辑、数据、界面显示分离的方法组织代码，将业务逻辑聚集到一个部件里面，在改进和个性化定制界面及用户交互的同时，不需要重新编写业务逻辑。MVC被独特的发展起来用于映射传统的输入、处理和输出功能在一个逻辑的图形化用户界面的结构中。<br>stop，不想copy了，大家直接看百度吧。😄<br><a href="http://baike.baidu.com/link?url=fkoUlAj1aCwIWLHkDUL4pCbgveQfl8WQ0TmLaflSSYfoH4vhmvNg3_ZqYygAdYvKsD2xMlboEoQJyi2EC_lw0-MhVm4FiGrL2wrSXB4U2z_ckuAjGltNtjHJnfb6hikEbDBzBDJ-RgDx-B8o_tK1hTnWcf1xMzClk5_HTYj3cHe" target="_blank" rel="external">MVC百度介绍</a></p>
+<p>对MVC的延伸扩展有MVVM,MVP大家自行百度吧，不论神马设计模式，请记住切忌不要过分依赖和相信他，有的时候回归本我或许能带给大家更好的效果。</p>
+<p><strong>文章本天成，妙手偶得之</strong><br><strong>设计亦如此</strong></p>
+<p>大而空的介绍那些不想讲了，大家有没发现在包含UITableView的ViewController的时候，必须去实现一堆protocol。一个字：烦，而且这好多重复的代码，每个UITableView其实都大同小异，有多少个cell，每个cell的样式是怎么样的，然后cell里的内容根据model来显示等等。而且这里面会有个小问题，就是view和model有一个交互。。。必须解耦～！因为在一个大的比较良好的工程里面，很多view是应该能够被重用的而不应该是依赖某些特定的Model。如果把绘制的这部分代码写在viewcontroller里，又会造成一个很烦的问题，一旦数据有所更改，你就得去翻这个viewcontroller，尤其是protocol方法多了后简直是找的有点忧桑～！那么我们就应该对这个UITableView进行一个瘦身计划。</p>
+<h3 id="更轻量级的UITableView"><a href="#更轻量级的UITableView" class="headerlink" title="更轻量级的UITableView"></a>更轻量级的UITableView</h3><p>首先我们发现一个tableview无非显示的就是一个数组里的数据，每个数组元素对应的是某个model的实例。那么这个datasource应该是可以抽出来的。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/// DataSource 接口类</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArrayDataSource</span>: <span class="title">NSObject</span>, <span class="title">UITableViewDataSource</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">var</span> items: [<span class="type">AnyObject</span>] = []</div><div class="line">    <span class="keyword">var</span> cellIdentifier = <span class="string">""</span></div><div class="line">    <span class="keyword">var</span> configBlock: (<span class="type">AnyObject</span>, <span class="type">AnyObject</span>) -&gt; <span class="type">Void</span> = &#123;<span class="number">_</span>,<span class="number">_</span> <span class="keyword">in</span> &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">override</span> <span class="keyword">init</span>() &#123;</div><div class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>()</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">initWithItems</span><span class="params">(list: [AnyObject], cellIdentifier: String, configCell: <span class="params">(AnyObject, AnyObject)</span></span></span> -&gt; <span class="type">Void</span> ) -&gt; <span class="type">ArrayDataSource</span> &#123;</div><div class="line">     </div><div class="line">        <span class="keyword">self</span>.items = list</div><div class="line">        <span class="keyword">self</span>.cellIdentifier = cellIdentifier</div><div class="line">        <span class="keyword">self</span>.configBlock = configCell</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">itemAtIndexPath</span><span class="params">(indexPath: NSIndexPath)</span></span> -&gt; <span class="type">AnyObject</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.items[indexPath.row]</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// MARK: DataSource delegate</span></div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">tableView</span><span class="params">(tableView: UITableView, numberOfRowsInSection section: Int)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.items.<span class="built_in">count</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">tableView</span><span class="params">(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath)</span></span> -&gt; <span class="type">UITableViewCell</span> &#123;</div><div class="line">        <span class="keyword">let</span> cell = tableView.dequeueReusableCellWithIdentifier(<span class="keyword">self</span>.cellIdentifier, forIndexPath: indexPath)</div><div class="line">        <span class="keyword">let</span> item = <span class="keyword">self</span>.itemAtIndexPath(indexPath)</div><div class="line">        <span class="keyword">self</span>.configBlock(cell, item)</div><div class="line">        <span class="keyword">return</span> cell</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个地方就把绘制的数量和cell的样式做了一个抽象。我们再看看具体的UITableView 的datasource的delegate实现的地方。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> list: [<span class="type">MoneyDataInfo</span>] = []</div><div class="line"><span class="keyword">var</span> arrayDataSource: <span class="type">ArrayDataSource</span>?</div><div class="line"><span class="keyword">let</span> cellStoryboardName = <span class="string">"xxTableViewCell"</span></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 初始化tableView</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">setupTableView</span><span class="params">()</span></span> -&gt; <span class="type">Void</span> &#123;</div><div class="line">    <span class="keyword">self</span>.tableView.delegate = <span class="keyword">self</span></div><div class="line">    <span class="keyword">self</span>.tableView.tableFooterView = <span class="type">UIView</span>()</div><div class="line">    </div><div class="line">    <span class="keyword">self</span>.tableView.mj_header = <span class="type">MJRefreshNormalHeader</span>(refreshingTarget: <span class="keyword">self</span>, refreshingAction: #selector(requestAccountRecordList))</div><div class="line">    <span class="keyword">self</span>.tableView.mj_header.beginRefreshing()</div><div class="line">    </div><div class="line">    <span class="keyword">let</span> nib = <span class="type">UINib</span>(nibName: cellStoryboardName, bundle: <span class="type">NSBundle</span>.mainBundle())</div><div class="line">    <span class="keyword">self</span>.tableView.registerNib(nib, forCellReuseIdentifier: cellStoryboardName)</div><div class="line">    </div><div class="line">    <span class="comment">// Adapter</span></div><div class="line">    <span class="keyword">self</span>.setupAdapter()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 构建适配器</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">setupAdapter</span><span class="params">()</span></span> &#123;</div><div class="line">    <span class="comment">// Adapter</span></div><div class="line">    <span class="keyword">self</span>.arrayDataSource = <span class="type">ArrayDataSource</span>()</div><div class="line">    <span class="keyword">self</span>.arrayDataSource?.initWithItems(<span class="keyword">self</span>.list, cellIdentifier: cellStoryboardName, configCell: &#123; (cell: <span class="type">AnyObject</span>, data: <span class="type">AnyObject</span>) <span class="keyword">in</span></div><div class="line">        </div><div class="line">        <span class="keyword">let</span> tmpCell = cell <span class="keyword">as</span>! <span class="type">MoneyInfoCellTableViewCell</span></div><div class="line">        <span class="keyword">let</span> tmpData = data <span class="keyword">as</span>! <span class="type">MoneyDataInfo</span></div><div class="line">        </div><div class="line">        tmpCell.configForData(tmpData)</div><div class="line">    &#125;)</div><div class="line">    </div><div class="line">    <span class="keyword">self</span>.tableView.dataSource = <span class="keyword">self</span>.arrayDataSource</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样子，只需要在数据发生变化的时候调用一下self.setupAdapter()这个方法即可。</p>
+<p>那么就到了具体cell的绘制的地方。how to do it？<br>我们应该把model传入到cell里去然后逐步绘制么，可以这样子，但并不科学，我们应该好好利用分类。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">MoneyInfoCellTableViewCell</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="comment">/**</span></div><div class="line">     根据数据填充</div><div class="line">     </div><div class="line">     - parameter data: MoneyDataInfo</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">configForData</span><span class="params">(data: MoneyDataInfo)</span></span> -&gt; <span class="type">Void</span> &#123;</div><div class="line">        </div><div class="line">        <span class="keyword">self</span>.selectionStyle = .<span class="type">None</span></div><div class="line">        ...</div><div class="line">        <span class="comment">// 这个地方根据data来进行对应的绘制</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>为什么这么做，这样子文件写的更多了，但有明显的几个好处，这里的tableviewcell可以重复利用，不耦合具体的数据，当数据有修改的时候，只需要修改这个分类的这个config方法即可，无需再去把viewcontroller折腾一遍，代码更加的清晰，条理性更好！这里抛弃掉了一些大而空的东西，只着力于解决一些具体的事务。<br>无论什么所谓权威的东西都不要过分迷信和执着，都要去尝试它并自己去作出合理的判断。还是用那句话作结尾：<br><strong>文章本天成，妙手偶得之</strong><br><strong>设计亦如此</strong></p>
+<p>参考文献：<br>objc.cn <a href="https://objccn.io/issue-1-1/" target="_blank" rel="external">https://objccn.io/issue-1-1/</a></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag">#iOS</a>
+          
+        </div>
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/09/11/iOS工程第三方代码包管理/" rel="next" title="iOS工程第三方代码包管理">
+                <i class="fa fa-chevron-left"></i> iOS工程第三方代码包管理
+              </a>
+            
+          </div>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2016/10/06/更好的模式，更轻量级的UITableView/"
+           data-title="更好的模式，更轻量级的UITableView" data-url="http://yoursite.com/2016/10/06/更好的模式，更轻量级的UITableView/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="http://o98au0nko.bkt.clouddn.com/1.jpg"
+               alt="Barton" />
+          <p class="site-author-name" itemprop="name">Barton</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/bartonTang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://twitter.com/barton0205" target="_blank" title="Twitter">
+                  
+                    <i class="fa fa-fw fa-twitter"></i>
+                  
+                  Twitter
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.linkedin.com/home?trk=nav_responsive_tab_home" target="_blank" title="Linkedin">
+                  
+                    <i class="fa fa-fw fa-linkedin"></i>
+                  
+                  Linkedin
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#更好的模式，更轻量级的UITableView"><span class="nav-number">1.</span> <span class="nav-text">更好的模式，更轻量级的UITableView</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Model-View-Controller"><span class="nav-number">1.1.</span> <span class="nav-text">Model-View-Controller</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#更轻量级的UITableView"><span class="nav-number">1.2.</span> <span class="nav-text">更轻量级的UITableView</span></a></li></ol></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2016</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Barton</span>
+</div>
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+        
+
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.0.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"bartontang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    <script src="/vendors/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
