@@ -235,6 +235,131 @@
             
               
                 
+                <a class="post-title-link" href="/2016/08/07/beego-orm-操作-sqlite/" itemprop="url">
+                  beego orm 操作(sqlite)
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-08-07T20:18:12+08:00" content="2016-08-07">
+              2016-08-07
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/08/07/beego-orm-操作-sqlite/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/07/beego-orm-操作-sqlite/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="beego-orm-操作-sqlite"><a href="#beego-orm-操作-sqlite" class="headerlink" title="beego orm 操作(sqlite)"></a>beego orm 操作(sqlite)</h2><p>继续对beego的学习，之前对beego的安装和简单的http请求有了一个大致的了解，接下来就是对数据库的一些操作。</p>
+<p>首先我们先定义一个models，在文件夹／models下定义models.go，具体代码如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> models</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">	<span class="string">"github.com/astaxie/beego/orm"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> UserBT <span class="keyword">struct</span> &#123;</div><div class="line">	Id   <span class="keyword">int64</span> <span class="string">`orm:"pk;auto"`</span> <span class="comment">//主键，自动增长</span></div><div class="line">	Name <span class="keyword">string</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewUser</span><span class="params">(name <span class="keyword">string</span>)</span> <span class="params">(*UserBT, error)</span></span> &#123;</div><div class="line">	<span class="keyword">if</span> name == <span class="string">""</span> &#123;</div><div class="line">		beego.Error(<span class="string">"user name is emptry"</span>)</div><div class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, fmt.Errorf(<span class="string">"user name is emptry"</span>)</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> &amp;UserBT&#123;Name: name&#125;, <span class="literal">nil</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</div><div class="line">	orm.RegisterModel(<span class="built_in">new</span>(UserBT))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这里定义了一个struct，里面有两个成员变量，一个是Id，自增长，还有个是名字Name。</p>
+<p>好，现在我们得对main.go进行一下改造，需要在初始化的时候去注册db并创建db表，假如已经存在表了，我们需要不重复创建。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">	<span class="string">"github.com/astaxie/beego/orm"</span></div><div class="line">	_ <span class="string">"github.com/mattn/go-sqlite3"</span></div><div class="line">	_ <span class="string">"quickstart/routers"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="comment">//自动建表</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">createTable</span><span class="params">()</span></span> &#123;</div><div class="line">	name := <span class="string">"default"</span>                          <span class="comment">//数据库别名</span></div><div class="line">	force := <span class="literal">false</span>                             <span class="comment">//不强制建数据库</span></div><div class="line">	verbose := <span class="literal">true</span>                            <span class="comment">//打印建表过程</span></div><div class="line">	err := orm.RunSyncdb(name, force, verbose) <span class="comment">//建表</span></div><div class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">		beego.Error(err)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</div><div class="line">	orm.RegisterDataBase(<span class="string">"default"</span>, <span class="string">"sqlite3"</span>, <span class="string">"data.db"</span>)</div><div class="line">	createTable()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">	beego.Run()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样子我们就创建了一个叫做data.db的sqlite数据库文件。<br>我们可以先run一下server并查看db是否创建成功，并多次启动server看看db是否是只创建一次，cd到$GOPATH/src/project目录下，运行bee run</p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/9.png" alt=""></p>
+<p>我们可以看到这里将创建表的过程进行了打印，然后我们会在$GOPATH/src/project目录下看到一个data.db文件，nice，数据库文件创建好了！</p>
+<p>接下来我们需要往db里头插入一些数据，更新一些数据，根据条件查询等操作，就是我们常说的增删查改。<br>我们先对Routue.go文件先做一下修改：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> routers</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">	<span class="string">"quickstart/controllers"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</div><div class="line">	beego.Router(<span class="string">"/"</span>, &amp;controllers.MainController&#123;&#125;)</div><div class="line">	beego.Router(<span class="string">"/test"</span>, &amp;controllers.TestController&#123;&#125;)</div><div class="line">	beego.Router(<span class="string">"/test/:id:int"</span>, &amp;controllers.TestController&#123;&#125;, <span class="string">"get:GetInfo"</span>)</div><div class="line">	beego.Router(<span class="string">"/test/:id:int/:name:string"</span>, &amp;controllers.TestController&#123;&#125;, <span class="string">"get:UpdateInfo"</span>)</div><div class="line">	beego.Router(<span class="string">"/testmysql"</span>, &amp;controllers.TestMySQLController&#123;&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>为了做个testcase，我们对之前的testcontroller.go文件做一下简单的修改。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> controllers</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">	<span class="string">"github.com/astaxie/beego/orm"</span></div><div class="line">	<span class="string">"quickstart/models"</span></div><div class="line">	<span class="string">"strconv"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> TestController <span class="keyword">struct</span> &#123;</div><div class="line">	beego.Controller</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Get请求</div><div class="line"> * @param  每次请求对数据库插入一条新的user</div><div class="line"> * @return &#123;[type]&#125;   [description]</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">Get</span><span class="params">()</span></span> &#123;</div><div class="line">	c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">		<span class="string">"msg"</span>:  <span class="string">"success"</span>,</div><div class="line">		<span class="string">"data"</span>: <span class="literal">false</span>,</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	o := orm.NewOrm()</div><div class="line">	o.Using(<span class="string">"default"</span>)</div><div class="line"></div><div class="line">	<span class="comment">// 插入一条User数据而且名字都赋值为barton</span></div><div class="line">	user, err := models.NewUser(<span class="string">"barton"</span>)</div><div class="line">	<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</div><div class="line">		beego.Debug(o.Insert(user))</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 获取User数据</div><div class="line"> * @param  id唯一标识符（自增长）</div><div class="line"> * @return &#123;[type]&#125;   [description]</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">GetInfo</span><span class="params">()</span></span> &#123;</div><div class="line">	id := c.Ctx.Input.Param(<span class="string">":id"</span>)</div><div class="line">	beego.Trace(<span class="string">"check id = "</span> + id)</div><div class="line">	o := orm.NewOrm()</div><div class="line">	user := <span class="built_in">new</span>(models.UserBT)</div><div class="line"></div><div class="line">	user.Id, _ = strconv.ParseInt(id, <span class="number">10</span>, <span class="number">64</span>)</div><div class="line">	err := o.Read(user)</div><div class="line"></div><div class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">		beego.Error(err)</div><div class="line">		c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">			<span class="string">"msg"</span>:  <span class="string">"false"</span>,</div><div class="line">			<span class="string">"data"</span>: <span class="string">"can not find id = "</span> + id + <span class="string">"from table user"</span>,</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">			<span class="string">"msg"</span>: <span class="string">"success"</span>,</div><div class="line">			<span class="string">"data"</span>: <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</div><div class="line">				<span class="string">"userId"</span>:   user.Id,</div><div class="line">				<span class="string">"userName"</span>: user.Name,</div><div class="line">			&#125;,</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 更新User数据</div><div class="line"> * @param  id唯一标识符（自增长），name 想更新的新的名字</div><div class="line"> * @return &#123;[type]&#125;   [description]</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">UpdateInfo</span><span class="params">()</span></span> &#123;</div><div class="line">	id := c.Ctx.Input.Param(<span class="string">":id"</span>)</div><div class="line">	newName := c.Ctx.Input.Param(<span class="string">":name"</span>)</div><div class="line">	beego.Trace(<span class="string">"check id = "</span> + id)</div><div class="line">	beego.Trace(<span class="string">"update name = "</span> + newName)</div><div class="line">	o := orm.NewOrm()</div><div class="line">	user := <span class="built_in">new</span>(models.UserBT)</div><div class="line"></div><div class="line">	<span class="comment">// 对id做int64的类型转换</span></div><div class="line">	user.Id, _ = strconv.ParseInt(id, <span class="number">10</span>, <span class="number">64</span>)</div><div class="line">	<span class="comment">// 查找Id == id 的数据</span></div><div class="line">	err1 := o.Read(user)</div><div class="line"></div><div class="line">	<span class="comment">// 查找出错并没找到对应的user数据</span></div><div class="line">	<span class="keyword">if</span> err1 != <span class="literal">nil</span> &#123;</div><div class="line">		beego.Error(err1)</div><div class="line">		c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">			<span class="string">"msg"</span>:  <span class="string">"false"</span>,</div><div class="line">			<span class="string">"data"</span>: <span class="string">"can not find id = "</span> + id + <span class="string">"from table user"</span>,</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		user.Name = newName</div><div class="line">		<span class="comment">// 对查找的数据user进行name的更新</span></div><div class="line">		_, err2 := o.Update(user, <span class="string">"name"</span>)</div><div class="line">		<span class="keyword">if</span> err2 != <span class="literal">nil</span> &#123;</div><div class="line">			<span class="comment">// 更新失败</span></div><div class="line">			beego.Error(err2)</div><div class="line">			c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">				<span class="string">"msg"</span>:  <span class="string">"false"</span>,</div><div class="line">				<span class="string">"data"</span>: <span class="string">"update name id = "</span> + id + <span class="string">"from table user"</span>,</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="comment">// 更新成功</span></div><div class="line">			c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">				<span class="string">"msg"</span>: <span class="string">"true"</span>,</div><div class="line">				<span class="string">"data"</span>: <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</div><div class="line">					<span class="string">"userId"</span>:   user.Id,</div><div class="line">					<span class="string">"userName"</span>: user.Name,</div><div class="line">				&#125;,</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">Post</span><span class="params">()</span></span> &#123;</div><div class="line">	account := c.GetString(<span class="string">"account"</span>)</div><div class="line">	password := c.GetString(<span class="string">"password"</span>)</div><div class="line">	beego.Info(account)</div><div class="line"></div><div class="line">	c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">		<span class="string">"msg"</span>: <span class="string">"success"</span>,</div><div class="line">		<span class="string">"data"</span>: <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</div><div class="line">			<span class="string">"account"</span>:  account,</div><div class="line">			<span class="string">"password"</span>: password,</div><div class="line">		&#125;,</div><div class="line">	&#125;</div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>OK，代码的简单改造已经完成，现在让我们来看看效果吧！<br>请求localhost:8080/test 插入一条数据<br><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_add.png" alt=""></p>
+<p>看红色线条块，我们插入了一个Id=12的数据<br>请求localhost:8080/test/12 查询Id=12的数据</p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_get1.png" alt=""></p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_get2.png" alt=""></p>
+<p>没有问题，那么假设查询的是个Id=999，就是db中木有的数据会发生什么呢？我们测试下，请求localhost:8080/test/999</p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_get3.png" alt=""></p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_get4.png" alt=""></p>
+<p>我们从这可以看到err被捕获并通过相应的处理json进行了返回。</p>
+<p>我们试试更新，请求localhost:8080/test/12/tang 更新Id=12的数据将name重新赋值为tang，并将重新获取Id=12的数据将数据用json返回</p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_update1.png" alt=""></p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_update2.png" alt=""></p>
+<p>我们看到更新成功了~！<br>下面是完整的工程地址：<br><a href="https://github.com/bartontang/beego_orm_test" target="_blank" rel="external">https://github.com/bartontang/beego_orm_test</a></p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/08/04/beego-框架搭建和简单http路由请求/" itemprop="url">
                   beego 框架搭建和简单http路由请求
                 </a>
@@ -673,116 +798,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/04/15/iOS-关于网络重定向的实现以及相关坑的记录/" itemprop="url">
-                  iOS 关于网络重定向的实现以及相关坑的记录
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-04-15T08:35:45+08:00" content="2016-04-15">
-              2016-04-15
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/04/15/iOS-关于网络重定向的实现以及相关坑的记录/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/15/iOS-关于网络重定向的实现以及相关坑的记录/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="iOS-关于网络重定向的实现以及相关坑的记录"><a href="#iOS-关于网络重定向的实现以及相关坑的记录" class="headerlink" title="iOS 关于网络重定向的实现以及相关坑的记录"></a>iOS 关于网络重定向的实现以及相关坑的记录</h2><p>之前在项目中遇到个问题，既可以说是坑也可以说是自己对一些非常iOS特性的东西的不了解所导致。记录以备有需要的同学或者自己忘了可以回头看看。</p>
-<p>先说下简化后的场景：现在server1提供了一个url让我去打开它，然后用户就在这个html的网页上做操作，然后比如点击某个按键提交一些信息到server1，问题来了，这个时候server1与另一个server2做交互并对url进行多次重定向。。具体更复杂一点，大概就是原来用某个url显示的webview经过url的重定向，而我需要拿到每次重定向的response，这里就出现了最后一个response我拿不到的情形。当然每次的request我可以拿到，那么request的url我也可以拿到，那我手动去请求，但这又不符合应用场景，而且也不太科学。</p>
-<p>开始折腾了好一会，也很郁闷，后来发现类似这种情况是必须自己手动去实现NSURLProtocol:</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">RedirectURLProtocol</span> : <span class="title">NSURLProtocol</span></span></div><div class="line">&#123;</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">"RedirectURLProtocol.h"</span></span></div><div class="line"><span class="keyword">static</span> <span class="built_in">NSString</span> * <span class="keyword">const</span> URLProtocolHandledKey = <span class="string">@"URLProtocolHandledKey"</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">RedirectURLProtocol</span> ()&lt;<span class="title">NSURLConnectionDelegate</span>&gt;</span></div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSURLConnection</span> *connection;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">RedirectURLProtocol</span></span></div><div class="line"></div><div class="line">+ (<span class="built_in">BOOL</span>)canInitWithRequest:(<span class="built_in">NSURLRequest</span> *)request</div><div class="line">&#123;</div><div class="line">    <span class="comment">//只处理http和https请求</span></div><div class="line">    <span class="built_in">NSString</span> *scheme = [[request URL] scheme];</div><div class="line">    <span class="keyword">if</span> ( ([scheme caseInsensitiveCompare:<span class="string">@"http"</span>] == <span class="built_in">NSOrderedSame</span> ||</div><div class="line">          [scheme caseInsensitiveCompare:<span class="string">@"https"</span>] == <span class="built_in">NSOrderedSame</span>))</div><div class="line">    &#123;</div><div class="line">        <span class="comment">//看看是否已经处理过了，防止无限循环</span></div><div class="line">        <span class="keyword">if</span> ([<span class="built_in">NSURLProtocol</span> propertyForKey:URLProtocolHandledKey inRequest:request]) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="literal">NO</span>;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> <span class="literal">YES</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="literal">NO</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (<span class="built_in">NSURLRequest</span> *)canonicalRequestForRequest:(<span class="built_in">NSURLRequest</span> *)request &#123;</div><div class="line">    <span class="built_in">NSMutableURLRequest</span> *mutableReqeust = [request mutableCopy];</div><div class="line">    mutableReqeust = [<span class="keyword">self</span> redirectHostInRequset:mutableReqeust];</div><div class="line">    <span class="keyword">return</span> mutableReqeust;</div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (<span class="built_in">BOOL</span>)requestIsCacheEquivalent:(<span class="built_in">NSURLRequest</span> *)a toRequest:(<span class="built_in">NSURLRequest</span> *)b</div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> [<span class="keyword">super</span> requestIsCacheEquivalent:a toRequest:b];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)startLoading</div><div class="line">&#123;</div><div class="line">    <span class="built_in">NSMutableURLRequest</span> *mutableReqeust = [[<span class="keyword">self</span> request] mutableCopy];</div><div class="line">    </div><div class="line">    <span class="comment">//打标签，防止无限循环</span></div><div class="line">    [<span class="built_in">NSURLProtocol</span> setProperty:@YES forKey:URLProtocolHandledKey inRequest:mutableReqeust];</div><div class="line">    </div><div class="line">    <span class="keyword">self</span>.connection = [<span class="built_in">NSURLConnection</span> connectionWithRequest:mutableReqeust delegate:<span class="keyword">self</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)stopLoading</div><div class="line">&#123;</div><div class="line">    [<span class="keyword">self</span>.connection cancel];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark - NSURLConnectionDelegate</span></div><div class="line">- (<span class="keyword">void</span>) connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveResponse:(<span class="built_in">NSURLResponse</span> *)response &#123;</div><div class="line">    [<span class="keyword">self</span>.client URLProtocol:<span class="keyword">self</span> didReceiveResponse:response cacheStoragePolicy:<span class="built_in">NSURLCacheStorageNotAllowed</span>];</div><div class="line">    </div><div class="line">    <span class="built_in">NSHTTPURLResponse</span>* tempResponse = (<span class="built_in">NSHTTPURLResponse</span>*)response;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"============ header = %@"</span>, tempResponse.allHeaderFields.allKeys);</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>) connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveData:(<span class="built_in">NSData</span> *)data &#123;</div><div class="line">    [<span class="keyword">self</span>.client URLProtocol:<span class="keyword">self</span> didLoadData:data];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>) connectionDidFinishLoading:(<span class="built_in">NSURLConnection</span> *)connection &#123;</div><div class="line">    [<span class="keyword">self</span>.client URLProtocolDidFinishLoading:<span class="keyword">self</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didFailWithError:(<span class="built_in">NSError</span> *)error &#123;</div><div class="line">    [<span class="keyword">self</span>.client URLProtocol:<span class="keyword">self</span> didFailWithError:error];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark -- private</span></div><div class="line">+(<span class="built_in">NSMutableURLRequest</span>*)redirectHostInRequset:(<span class="built_in">NSMutableURLRequest</span>*)request</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> ([request.URL host].length == <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">return</span> request;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="built_in">NSString</span> *originUrlString = [request.URL absoluteString];</div><div class="line">    <span class="built_in">NSString</span> *originHostString = [request.URL host];</div><div class="line">    <span class="built_in">NSRange</span> hostRange = [originUrlString rangeOfString:originHostString];</div><div class="line">    <span class="keyword">if</span> (hostRange.location == <span class="built_in">NSNotFound</span>) &#123;</div><div class="line">        <span class="keyword">return</span> request;</div><div class="line">    &#125;</div><div class="line">        </div><div class="line">    <span class="comment">// 替换url，现有不需要去重定向不同的url，所以直接将request的urlcopy</span></div><div class="line">    <span class="built_in">NSString</span> *urlString = request.URL.absoluteString;</div><div class="line">    <span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:urlString];</div><div class="line">    request.URL = url;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> request;</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
-<p>这样子我就将会在- (void) connection:(NSURLConnection )connection didReceiveResponse:(NSURLResponse )response这个函数里获得response<br>在你需要之前加入以下这句话</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">NSURLProtocol</span> registerClass:[RedirectURLProtocol <span class="keyword">class</span>]];</div></pre></td></tr></table></figure>
-<p>用完记得还是把它移除掉，不然你的重定向协议是会一直影响你的App的，直到你自己手动移除掉它。</p>
-<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">NSURLProtocol</span> unregisterClass:[RedirectURLProtocol <span class="keyword">class</span>]];</div></pre></td></tr></table></figure>
-<p>先记录到这，其实这样子你就可以自己去定制协议定制规则，but最好别这么干吧，需要点功底的感觉。不然自己坑自己的节奏~</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -828,7 +843,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

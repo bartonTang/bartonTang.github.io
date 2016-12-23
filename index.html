@@ -235,6 +235,109 @@
             
               
                 
+                <a class="post-title-link" href="/2016/12/23/记录Gogs搭建/" itemprop="url">
+                  记录Gogs搭建
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-12-23T23:04:56+08:00" content="2016-12-23">
+              2016-12-23
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/12/23/记录Gogs搭建/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/12/23/记录Gogs搭建/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="记录Gogs搭建"><a href="#记录Gogs搭建" class="headerlink" title="记录Gogs搭建"></a>记录Gogs搭建</h2><p>git很好用，毋庸置疑。一直想在自己的server搭建个git服务器，gitlab很不错，但是一看配置，有点懵逼，一看好长好长的配置步骤，尤其是对我这种linux掌握不多的孩纸来说无疑略困难。直到无聊逛oschina的时候看到Gogs。还是用Go撸的，不错～于是自己搞来试试，过来妥妥滴。<br><a href="https://gogs.io/" target="_blank" rel="external">Gogs官网</a></p>
+<p>这里面有很详细的文档，首先在阿里云上<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">wget https://dl.gogs.io/gogs_v0.9.97_linux_amd64.zip</div><div class="line">sudo unzip gogs_v0.9.97_linux_amd64.zip</div><div class="line"><span class="built_in">cd</span> gogs_v0.9.97_linux_amd64</div><div class="line">./gogs web</div></pre></td></tr></table></figure></p>
+<p>据说这样子就大功告成～～！！当然有坑，<br>1、你需要自己去mysql里创建一个gogs的表<br>2、你需要一个git用户，默认的gogs是在git用户去启动的<br>3、在上面那堆命令执行的过程中要注意权限的问题</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/10/06/更好的模式，更轻量级的UITableView/" itemprop="url">
                   更好的模式，更轻量级的UITableView
                 </a>
@@ -659,131 +762,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/07/beego-orm-操作-sqlite/" itemprop="url">
-                  beego orm 操作(sqlite)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-07T20:18:12+08:00" content="2016-08-07">
-              2016-08-07
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/07/beego-orm-操作-sqlite/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/07/beego-orm-操作-sqlite/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="beego-orm-操作-sqlite"><a href="#beego-orm-操作-sqlite" class="headerlink" title="beego orm 操作(sqlite)"></a>beego orm 操作(sqlite)</h2><p>继续对beego的学习，之前对beego的安装和简单的http请求有了一个大致的了解，接下来就是对数据库的一些操作。</p>
-<p>首先我们先定义一个models，在文件夹／models下定义models.go，具体代码如下：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> models</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"fmt"</span></div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">	<span class="string">"github.com/astaxie/beego/orm"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> UserBT <span class="keyword">struct</span> &#123;</div><div class="line">	Id   <span class="keyword">int64</span> <span class="string">`orm:"pk;auto"`</span> <span class="comment">//主键，自动增长</span></div><div class="line">	Name <span class="keyword">string</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">NewUser</span><span class="params">(name <span class="keyword">string</span>)</span> <span class="params">(*UserBT, error)</span></span> &#123;</div><div class="line">	<span class="keyword">if</span> name == <span class="string">""</span> &#123;</div><div class="line">		beego.Error(<span class="string">"user name is emptry"</span>)</div><div class="line">		<span class="keyword">return</span> <span class="literal">nil</span>, fmt.Errorf(<span class="string">"user name is emptry"</span>)</div><div class="line">	&#125;</div><div class="line">	<span class="keyword">return</span> &amp;UserBT&#123;Name: name&#125;, <span class="literal">nil</span></div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</div><div class="line">	orm.RegisterModel(<span class="built_in">new</span>(UserBT))</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里定义了一个struct，里面有两个成员变量，一个是Id，自增长，还有个是名字Name。</p>
-<p>好，现在我们得对main.go进行一下改造，需要在初始化的时候去注册db并创建db表，假如已经存在表了，我们需要不重复创建。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">	<span class="string">"github.com/astaxie/beego/orm"</span></div><div class="line">	_ <span class="string">"github.com/mattn/go-sqlite3"</span></div><div class="line">	_ <span class="string">"quickstart/routers"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="comment">//自动建表</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">createTable</span><span class="params">()</span></span> &#123;</div><div class="line">	name := <span class="string">"default"</span>                          <span class="comment">//数据库别名</span></div><div class="line">	force := <span class="literal">false</span>                             <span class="comment">//不强制建数据库</span></div><div class="line">	verbose := <span class="literal">true</span>                            <span class="comment">//打印建表过程</span></div><div class="line">	err := orm.RunSyncdb(name, force, verbose) <span class="comment">//建表</span></div><div class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">		beego.Error(err)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</div><div class="line">	orm.RegisterDataBase(<span class="string">"default"</span>, <span class="string">"sqlite3"</span>, <span class="string">"data.db"</span>)</div><div class="line">	createTable()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">	beego.Run()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这样子我们就创建了一个叫做data.db的sqlite数据库文件。<br>我们可以先run一下server并查看db是否创建成功，并多次启动server看看db是否是只创建一次，cd到$GOPATH/src/project目录下，运行bee run</p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/9.png" alt=""></p>
-<p>我们可以看到这里将创建表的过程进行了打印，然后我们会在$GOPATH/src/project目录下看到一个data.db文件，nice，数据库文件创建好了！</p>
-<p>接下来我们需要往db里头插入一些数据，更新一些数据，根据条件查询等操作，就是我们常说的增删查改。<br>我们先对Routue.go文件先做一下修改：</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> routers</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">	<span class="string">"quickstart/controllers"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</div><div class="line">	beego.Router(<span class="string">"/"</span>, &amp;controllers.MainController&#123;&#125;)</div><div class="line">	beego.Router(<span class="string">"/test"</span>, &amp;controllers.TestController&#123;&#125;)</div><div class="line">	beego.Router(<span class="string">"/test/:id:int"</span>, &amp;controllers.TestController&#123;&#125;, <span class="string">"get:GetInfo"</span>)</div><div class="line">	beego.Router(<span class="string">"/test/:id:int/:name:string"</span>, &amp;controllers.TestController&#123;&#125;, <span class="string">"get:UpdateInfo"</span>)</div><div class="line">	beego.Router(<span class="string">"/testmysql"</span>, &amp;controllers.TestMySQLController&#123;&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>为了做个testcase，我们对之前的testcontroller.go文件做一下简单的修改。</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> controllers</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">	<span class="string">"github.com/astaxie/beego/orm"</span></div><div class="line">	<span class="string">"quickstart/models"</span></div><div class="line">	<span class="string">"strconv"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> TestController <span class="keyword">struct</span> &#123;</div><div class="line">	beego.Controller</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * Get请求</div><div class="line"> * @param  每次请求对数据库插入一条新的user</div><div class="line"> * @return &#123;[type]&#125;   [description]</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">Get</span><span class="params">()</span></span> &#123;</div><div class="line">	c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">		<span class="string">"msg"</span>:  <span class="string">"success"</span>,</div><div class="line">		<span class="string">"data"</span>: <span class="literal">false</span>,</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	o := orm.NewOrm()</div><div class="line">	o.Using(<span class="string">"default"</span>)</div><div class="line"></div><div class="line">	<span class="comment">// 插入一条User数据而且名字都赋值为barton</span></div><div class="line">	user, err := models.NewUser(<span class="string">"barton"</span>)</div><div class="line">	<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</div><div class="line">		beego.Debug(o.Insert(user))</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 获取User数据</div><div class="line"> * @param  id唯一标识符（自增长）</div><div class="line"> * @return &#123;[type]&#125;   [description]</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">GetInfo</span><span class="params">()</span></span> &#123;</div><div class="line">	id := c.Ctx.Input.Param(<span class="string">":id"</span>)</div><div class="line">	beego.Trace(<span class="string">"check id = "</span> + id)</div><div class="line">	o := orm.NewOrm()</div><div class="line">	user := <span class="built_in">new</span>(models.UserBT)</div><div class="line"></div><div class="line">	user.Id, _ = strconv.ParseInt(id, <span class="number">10</span>, <span class="number">64</span>)</div><div class="line">	err := o.Read(user)</div><div class="line"></div><div class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">		beego.Error(err)</div><div class="line">		c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">			<span class="string">"msg"</span>:  <span class="string">"false"</span>,</div><div class="line">			<span class="string">"data"</span>: <span class="string">"can not find id = "</span> + id + <span class="string">"from table user"</span>,</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">			<span class="string">"msg"</span>: <span class="string">"success"</span>,</div><div class="line">			<span class="string">"data"</span>: <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</div><div class="line">				<span class="string">"userId"</span>:   user.Id,</div><div class="line">				<span class="string">"userName"</span>: user.Name,</div><div class="line">			&#125;,</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 更新User数据</div><div class="line"> * @param  id唯一标识符（自增长），name 想更新的新的名字</div><div class="line"> * @return &#123;[type]&#125;   [description]</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">UpdateInfo</span><span class="params">()</span></span> &#123;</div><div class="line">	id := c.Ctx.Input.Param(<span class="string">":id"</span>)</div><div class="line">	newName := c.Ctx.Input.Param(<span class="string">":name"</span>)</div><div class="line">	beego.Trace(<span class="string">"check id = "</span> + id)</div><div class="line">	beego.Trace(<span class="string">"update name = "</span> + newName)</div><div class="line">	o := orm.NewOrm()</div><div class="line">	user := <span class="built_in">new</span>(models.UserBT)</div><div class="line"></div><div class="line">	<span class="comment">// 对id做int64的类型转换</span></div><div class="line">	user.Id, _ = strconv.ParseInt(id, <span class="number">10</span>, <span class="number">64</span>)</div><div class="line">	<span class="comment">// 查找Id == id 的数据</span></div><div class="line">	err1 := o.Read(user)</div><div class="line"></div><div class="line">	<span class="comment">// 查找出错并没找到对应的user数据</span></div><div class="line">	<span class="keyword">if</span> err1 != <span class="literal">nil</span> &#123;</div><div class="line">		beego.Error(err1)</div><div class="line">		c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">			<span class="string">"msg"</span>:  <span class="string">"false"</span>,</div><div class="line">			<span class="string">"data"</span>: <span class="string">"can not find id = "</span> + id + <span class="string">"from table user"</span>,</div><div class="line">		&#125;</div><div class="line">	&#125; <span class="keyword">else</span> &#123;</div><div class="line">		user.Name = newName</div><div class="line">		<span class="comment">// 对查找的数据user进行name的更新</span></div><div class="line">		_, err2 := o.Update(user, <span class="string">"name"</span>)</div><div class="line">		<span class="keyword">if</span> err2 != <span class="literal">nil</span> &#123;</div><div class="line">			<span class="comment">// 更新失败</span></div><div class="line">			beego.Error(err2)</div><div class="line">			c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">				<span class="string">"msg"</span>:  <span class="string">"false"</span>,</div><div class="line">				<span class="string">"data"</span>: <span class="string">"update name id = "</span> + id + <span class="string">"from table user"</span>,</div><div class="line">			&#125;</div><div class="line">		&#125; <span class="keyword">else</span> &#123;</div><div class="line">			<span class="comment">// 更新成功</span></div><div class="line">			c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">				<span class="string">"msg"</span>: <span class="string">"true"</span>,</div><div class="line">				<span class="string">"data"</span>: <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</div><div class="line">					<span class="string">"userId"</span>:   user.Id,</div><div class="line">					<span class="string">"userName"</span>: user.Name,</div><div class="line">				&#125;,</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">Post</span><span class="params">()</span></span> &#123;</div><div class="line">	account := c.GetString(<span class="string">"account"</span>)</div><div class="line">	password := c.GetString(<span class="string">"password"</span>)</div><div class="line">	beego.Info(account)</div><div class="line"></div><div class="line">	c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">		<span class="string">"msg"</span>: <span class="string">"success"</span>,</div><div class="line">		<span class="string">"data"</span>: <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</div><div class="line">			<span class="string">"account"</span>:  account,</div><div class="line">			<span class="string">"password"</span>: password,</div><div class="line">		&#125;,</div><div class="line">	&#125;</div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>OK，代码的简单改造已经完成，现在让我们来看看效果吧！<br>请求localhost:8080/test 插入一条数据<br><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_add.png" alt=""></p>
-<p>看红色线条块，我们插入了一个Id=12的数据<br>请求localhost:8080/test/12 查询Id=12的数据</p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_get1.png" alt=""></p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_get2.png" alt=""></p>
-<p>没有问题，那么假设查询的是个Id=999，就是db中木有的数据会发生什么呢？我们测试下，请求localhost:8080/test/999</p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_get3.png" alt=""></p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_get4.png" alt=""></p>
-<p>我们从这可以看到err被捕获并通过相应的处理json进行了返回。</p>
-<p>我们试试更新，请求localhost:8080/test/12/tang 更新Id=12的数据将name重新赋值为tang，并将重新获取Id=12的数据将数据用json返回</p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_update1.png" alt=""></p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/go_orm_sqlite_update2.png" alt=""></p>
-<p>我们看到更新成功了~！<br>下面是完整的工程地址：<br><a href="https://github.com/bartontang/beego_orm_test" target="_blank" rel="external">https://github.com/bartontang/beego_orm_test</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -829,7 +807,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>

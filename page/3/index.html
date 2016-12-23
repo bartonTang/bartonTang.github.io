@@ -235,6 +235,116 @@
             
               
                 
+                <a class="post-title-link" href="/2016/04/15/iOS-关于网络重定向的实现以及相关坑的记录/" itemprop="url">
+                  iOS 关于网络重定向的实现以及相关坑的记录
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-15T08:35:45+08:00" content="2016-04-15">
+              2016-04-15
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/15/iOS-关于网络重定向的实现以及相关坑的记录/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/15/iOS-关于网络重定向的实现以及相关坑的记录/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="iOS-关于网络重定向的实现以及相关坑的记录"><a href="#iOS-关于网络重定向的实现以及相关坑的记录" class="headerlink" title="iOS 关于网络重定向的实现以及相关坑的记录"></a>iOS 关于网络重定向的实现以及相关坑的记录</h2><p>之前在项目中遇到个问题，既可以说是坑也可以说是自己对一些非常iOS特性的东西的不了解所导致。记录以备有需要的同学或者自己忘了可以回头看看。</p>
+<p>先说下简化后的场景：现在server1提供了一个url让我去打开它，然后用户就在这个html的网页上做操作，然后比如点击某个按键提交一些信息到server1，问题来了，这个时候server1与另一个server2做交互并对url进行多次重定向。。具体更复杂一点，大概就是原来用某个url显示的webview经过url的重定向，而我需要拿到每次重定向的response，这里就出现了最后一个response我拿不到的情形。当然每次的request我可以拿到，那么request的url我也可以拿到，那我手动去请求，但这又不符合应用场景，而且也不太科学。</p>
+<p>开始折腾了好一会，也很郁闷，后来发现类似这种情况是必须自己手动去实现NSURLProtocol:</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">RedirectURLProtocol</span> : <span class="title">NSURLProtocol</span></span></div><div class="line">&#123;</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">"RedirectURLProtocol.h"</span></span></div><div class="line"><span class="keyword">static</span> <span class="built_in">NSString</span> * <span class="keyword">const</span> URLProtocolHandledKey = <span class="string">@"URLProtocolHandledKey"</span>;</div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">RedirectURLProtocol</span> ()&lt;<span class="title">NSURLConnectionDelegate</span>&gt;</span></div><div class="line"></div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSURLConnection</span> *connection;</div><div class="line"></div><div class="line"><span class="keyword">@end</span></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">@implementation</span> <span class="title">RedirectURLProtocol</span></span></div><div class="line"></div><div class="line">+ (<span class="built_in">BOOL</span>)canInitWithRequest:(<span class="built_in">NSURLRequest</span> *)request</div><div class="line">&#123;</div><div class="line">    <span class="comment">//只处理http和https请求</span></div><div class="line">    <span class="built_in">NSString</span> *scheme = [[request URL] scheme];</div><div class="line">    <span class="keyword">if</span> ( ([scheme caseInsensitiveCompare:<span class="string">@"http"</span>] == <span class="built_in">NSOrderedSame</span> ||</div><div class="line">          [scheme caseInsensitiveCompare:<span class="string">@"https"</span>] == <span class="built_in">NSOrderedSame</span>))</div><div class="line">    &#123;</div><div class="line">        <span class="comment">//看看是否已经处理过了，防止无限循环</span></div><div class="line">        <span class="keyword">if</span> ([<span class="built_in">NSURLProtocol</span> propertyForKey:URLProtocolHandledKey inRequest:request]) &#123;</div><div class="line">            <span class="keyword">return</span> <span class="literal">NO</span>;</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> <span class="literal">YES</span>;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="literal">NO</span>;</div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (<span class="built_in">NSURLRequest</span> *)canonicalRequestForRequest:(<span class="built_in">NSURLRequest</span> *)request &#123;</div><div class="line">    <span class="built_in">NSMutableURLRequest</span> *mutableReqeust = [request mutableCopy];</div><div class="line">    mutableReqeust = [<span class="keyword">self</span> redirectHostInRequset:mutableReqeust];</div><div class="line">    <span class="keyword">return</span> mutableReqeust;</div><div class="line">&#125;</div><div class="line"></div><div class="line">+ (<span class="built_in">BOOL</span>)requestIsCacheEquivalent:(<span class="built_in">NSURLRequest</span> *)a toRequest:(<span class="built_in">NSURLRequest</span> *)b</div><div class="line">&#123;</div><div class="line">    <span class="keyword">return</span> [<span class="keyword">super</span> requestIsCacheEquivalent:a toRequest:b];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)startLoading</div><div class="line">&#123;</div><div class="line">    <span class="built_in">NSMutableURLRequest</span> *mutableReqeust = [[<span class="keyword">self</span> request] mutableCopy];</div><div class="line">    </div><div class="line">    <span class="comment">//打标签，防止无限循环</span></div><div class="line">    [<span class="built_in">NSURLProtocol</span> setProperty:@YES forKey:URLProtocolHandledKey inRequest:mutableReqeust];</div><div class="line">    </div><div class="line">    <span class="keyword">self</span>.connection = [<span class="built_in">NSURLConnection</span> connectionWithRequest:mutableReqeust delegate:<span class="keyword">self</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)stopLoading</div><div class="line">&#123;</div><div class="line">    [<span class="keyword">self</span>.connection cancel];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark - NSURLConnectionDelegate</span></div><div class="line">- (<span class="keyword">void</span>) connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveResponse:(<span class="built_in">NSURLResponse</span> *)response &#123;</div><div class="line">    [<span class="keyword">self</span>.client URLProtocol:<span class="keyword">self</span> didReceiveResponse:response cacheStoragePolicy:<span class="built_in">NSURLCacheStorageNotAllowed</span>];</div><div class="line">    </div><div class="line">    <span class="built_in">NSHTTPURLResponse</span>* tempResponse = (<span class="built_in">NSHTTPURLResponse</span>*)response;</div><div class="line">    <span class="built_in">NSLog</span>(<span class="string">@"============ header = %@"</span>, tempResponse.allHeaderFields.allKeys);</div><div class="line">    </div><div class="line">    </div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>) connection:(<span class="built_in">NSURLConnection</span> *)connection didReceiveData:(<span class="built_in">NSData</span> *)data &#123;</div><div class="line">    [<span class="keyword">self</span>.client URLProtocol:<span class="keyword">self</span> didLoadData:data];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>) connectionDidFinishLoading:(<span class="built_in">NSURLConnection</span> *)connection &#123;</div><div class="line">    [<span class="keyword">self</span>.client URLProtocolDidFinishLoading:<span class="keyword">self</span>];</div><div class="line">&#125;</div><div class="line"></div><div class="line">- (<span class="keyword">void</span>)connection:(<span class="built_in">NSURLConnection</span> *)connection didFailWithError:(<span class="built_in">NSError</span> *)error &#123;</div><div class="line">    [<span class="keyword">self</span>.client URLProtocol:<span class="keyword">self</span> didFailWithError:error];</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">#pragma mark -- private</span></div><div class="line">+(<span class="built_in">NSMutableURLRequest</span>*)redirectHostInRequset:(<span class="built_in">NSMutableURLRequest</span>*)request</div><div class="line">&#123;</div><div class="line">    <span class="keyword">if</span> ([request.URL host].length == <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">return</span> request;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="built_in">NSString</span> *originUrlString = [request.URL absoluteString];</div><div class="line">    <span class="built_in">NSString</span> *originHostString = [request.URL host];</div><div class="line">    <span class="built_in">NSRange</span> hostRange = [originUrlString rangeOfString:originHostString];</div><div class="line">    <span class="keyword">if</span> (hostRange.location == <span class="built_in">NSNotFound</span>) &#123;</div><div class="line">        <span class="keyword">return</span> request;</div><div class="line">    &#125;</div><div class="line">        </div><div class="line">    <span class="comment">// 替换url，现有不需要去重定向不同的url，所以直接将request的urlcopy</span></div><div class="line">    <span class="built_in">NSString</span> *urlString = request.URL.absoluteString;</div><div class="line">    <span class="built_in">NSURL</span> *url = [<span class="built_in">NSURL</span> URLWithString:urlString];</div><div class="line">    request.URL = url;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> request;</div><div class="line">&#125;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
+<p>这样子我就将会在- (void) connection:(NSURLConnection )connection didReceiveResponse:(NSURLResponse )response这个函数里获得response<br>在你需要之前加入以下这句话</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">NSURLProtocol</span> registerClass:[RedirectURLProtocol <span class="keyword">class</span>]];</div></pre></td></tr></table></figure>
+<p>用完记得还是把它移除掉，不然你的重定向协议是会一直影响你的App的，直到你自己手动移除掉它。</p>
+<figure class="highlight objc"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[<span class="built_in">NSURLProtocol</span> unregisterClass:[RedirectURLProtocol <span class="keyword">class</span>]];</div></pre></td></tr></table></figure>
+<p>先记录到这，其实这样子你就可以自己去定制协议定制规则，but最好别这么干吧，需要点功底的感觉。不然自己坑自己的节奏~</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/04/08/Jenkins-搭建iOS持续集成环境/" itemprop="url">
                   Jenkins 搭建iOS持续集成环境
                 </a>
@@ -624,7 +734,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">13</span>
+              <span class="site-state-item-count">14</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
