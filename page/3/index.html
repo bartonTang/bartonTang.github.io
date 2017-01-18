@@ -235,6 +235,109 @@
             
               
                 
+                <a class="post-title-link" href="/2016/04/24/关于iOS的二维码生成和解析/" itemprop="url">
+                  关于iOS的二维码生成和解析
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2016-04-24T19:46:39+08:00" content="2016-04-24">
+              2016-04-24
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2016/04/24/关于iOS的二维码生成和解析/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/04/24/关于iOS的二维码生成和解析/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="关于iOS的二维码生成和解析"><a href="#关于iOS的二维码生成和解析" class="headerlink" title="关于iOS的二维码生成和解析"></a>关于iOS的二维码生成和解析</h2><p>在现在的应用App中多多少少都会遇到一个功能，扫描二维码，其实扫出来的就是一个字符串，大家有兴趣可以对一些微信的二维码进行test，写个test project然后将扫描出来的结果用弹窗的形式直观地显示出来。<br>最近在做的个小东西就包括了扫码，并且需要将一个字符串转成一个UIImage的对象，查找了下网上大神们的blog再看了下Apple的官方文档，其实还算简单。上代码吧：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">QRCodeUtil</span>: <span class="title">NSObject</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="comment">/**</span></div><div class="line">     识别二维码，返回字符串</div><div class="line">     </div><div class="line">     - parameter image: 二维码图像</div><div class="line"></div><div class="line">     - returns: 二维码字符</div><div class="line">     */</div><div class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">recognizeQRImage</span><span class="params">(image: UIImage)</span></span> -&gt; <span class="type">String</span>&#123;</div><div class="line">        <span class="keyword">var</span> temp: <span class="type">Int32</span> = <span class="number">1</span></div><div class="line">        <span class="keyword">let</span> orientation = image.imageOrientation</div><div class="line">        <span class="keyword">let</span> detector: <span class="type">CIDetector</span> = <span class="type">CIDetector</span>(ofType: <span class="type">CIDetectorTypeQRCode</span>, context: <span class="literal">nil</span>, options: [<span class="type">CIDetectorAccuracy</span>:<span class="type">CIDetectorAccuracyHigh</span>])</div><div class="line">        </div><div class="line">        <span class="keyword">switch</span> orientation&#123;</div><div class="line">            <span class="keyword">case</span> .<span class="type">Up</span>:</div><div class="line">                temp = <span class="number">1</span></div><div class="line">                <span class="keyword">break</span></div><div class="line"></div><div class="line">            <span class="keyword">case</span> .<span class="type">Down</span>:</div><div class="line">                temp = <span class="number">3</span></div><div class="line">                <span class="keyword">break</span></div><div class="line"></div><div class="line">            <span class="keyword">case</span> .<span class="type">Left</span>:</div><div class="line">                temp = <span class="number">8</span></div><div class="line">                <span class="keyword">break</span></div><div class="line">            </div><div class="line">            <span class="keyword">case</span> .<span class="type">Right</span>:</div><div class="line">                temp = <span class="number">6</span></div><div class="line">                <span class="keyword">break</span></div><div class="line"></div><div class="line">            <span class="keyword">case</span> .<span class="type">UpMirrored</span>:</div><div class="line">                temp = <span class="number">2</span></div><div class="line">                <span class="keyword">break</span></div><div class="line"></div><div class="line">            <span class="keyword">case</span> .<span class="type">DownMirrored</span>:</div><div class="line">                temp = <span class="number">4</span></div><div class="line">                <span class="keyword">break</span></div><div class="line"></div><div class="line">            <span class="keyword">case</span> .<span class="type">LeftMirrored</span>:</div><div class="line">                temp = <span class="number">5</span></div><div class="line">                <span class="keyword">break</span></div><div class="line"></div><div class="line">            <span class="keyword">case</span> .<span class="type">RightMirrored</span>:</div><div class="line">                temp = <span class="number">7</span></div><div class="line">                <span class="keyword">break</span></div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">let</span> img = <span class="type">CIImage</span>(<span class="type">CGImage</span>: image.<span class="type">CGImage</span>!, options: [<span class="type">CIDetectorImageOrientation</span>: <span class="type">NSNumber</span>(int: temp)])</div><div class="line">        <span class="keyword">let</span> features: [<span class="type">CIFeature</span>]? = detector.featuresInImage(img, options: [<span class="type">CIDetectorAccuracy</span>: <span class="type">CIDetectorAccuracyHigh</span>, <span class="type">CIDetectorImageOrientation</span>: <span class="type">NSNumber</span>(int: temp)])</div><div class="line">        <span class="keyword">if</span>( features != <span class="literal">nil</span> &amp;&amp; features?.<span class="built_in">count</span> &gt; <span class="number">0</span>)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">let</span> feature = features![<span class="number">0</span>]</div><div class="line">            </div><div class="line">            <span class="keyword">if</span> feature.isKindOfClass(<span class="type">CIQRCodeFeature</span>)</div><div class="line">            &#123;</div><div class="line">                <span class="keyword">let</span> featureTmp:<span class="type">CIQRCodeFeature</span> = feature <span class="keyword">as</span>! <span class="type">CIQRCodeFeature</span></div><div class="line">                </div><div class="line">                <span class="keyword">let</span> scanResult = featureTmp.messageString</div><div class="line">                <span class="keyword">return</span> scanResult</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="string">""</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">/**</span></div><div class="line">    生成二维码</div><div class="line">    </div><div class="line">    - parameter codeType:   code类型</div><div class="line">    - parameter codeString: 字符串</div><div class="line">    - parameter size:       大小</div><div class="line">    - parameter qrColor:    二维码的颜色</div><div class="line">    - parameter bkColor:    二维码的背景颜色</div><div class="line">    </div><div class="line">    - returns: 图像UIImage</div><div class="line">    */</div><div class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> <span class="title">createCode</span><span class="params">(codeType: String, codeString: String, size: CGSize, qrColor: UIColor, bkColor: UIColor )</span></span>-&gt;<span class="type">UIImage</span>?</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">let</span> stringData = codeString.dataUsingEncoding(<span class="type">NSUTF8StringEncoding</span>)</div><div class="line">        <span class="comment">//系统自带能生成的码</span></div><div class="line">        <span class="comment">//        CIAztecCodeGenerator</span></div><div class="line">        <span class="comment">//        CICode128BarcodeGenerator</span></div><div class="line">        <span class="comment">//        CIPDF417BarcodeGenerator</span></div><div class="line">        <span class="comment">//        CIQRCodeGenerator</span></div><div class="line">        <span class="keyword">let</span> qrFilter = <span class="type">CIFilter</span>(name: codeType)</div><div class="line">        qrFilter?.setValue(stringData, forKey: <span class="string">"inputMessage"</span>)</div><div class="line">        qrFilter?.setValue(<span class="string">"H"</span>, forKey: <span class="string">"inputCorrectionLevel"</span>)</div><div class="line">        </div><div class="line">        <span class="comment">//上色</span></div><div class="line">        <span class="keyword">let</span> colorFilter = <span class="type">CIFilter</span>(name: <span class="string">"CIFalseColor"</span>, withInputParameters: [<span class="string">"inputImage"</span>:qrFilter!.outputImage!,<span class="string">"inputColor0"</span>:<span class="type">CIColor</span>(<span class="type">CGColor</span>: qrColor.<span class="type">CGColor</span>), <span class="string">"inputColor1"</span>: <span class="type">CIColor</span>(<span class="type">CGColor</span>: bkColor.<span class="type">CGColor</span>)])</div><div class="line">        </div><div class="line">        <span class="keyword">let</span> qrImage = colorFilter!.outputImage;</div><div class="line">        </div><div class="line">        <span class="comment">//绘制</span></div><div class="line">        <span class="keyword">let</span> cgImage = <span class="type">CIContext</span>().createCGImage(qrImage!, fromRect: qrImage!.extent)</div><div class="line">        </div><div class="line">        <span class="type">UIGraphicsBeginImageContext</span>(size);</div><div class="line">        <span class="keyword">let</span> context = <span class="type">UIGraphicsGetCurrentContext</span>();</div><div class="line">        <span class="type">CGContextSetInterpolationQuality</span>(context, <span class="type">CGInterpolationQuality</span>.<span class="type">None</span>);</div><div class="line">        <span class="type">CGContextScaleCTM</span>(context, <span class="number">1.0</span>, -<span class="number">1.0</span>);</div><div class="line">        <span class="type">CGContextDrawImage</span>(context, <span class="type">CGContextGetClipBoundingBox</span>(context), cgImage);</div><div class="line">        <span class="keyword">let</span> codeImage = <span class="type">UIGraphicsGetImageFromCurrentImageContext</span>();</div><div class="line">        <span class="type">UIGraphicsEndImageContext</span>();</div><div class="line">        </div><div class="line">        <span class="keyword">return</span> codeImage</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>使用的时候也很方便，在此就不再赘述了~记录一下代码，enjoy it~！</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/04/15/iOS-关于网络重定向的实现以及相关坑的记录/" itemprop="url">
                   iOS 关于网络重定向的实现以及相关坑的记录
                 </a>
@@ -734,7 +837,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -810,7 +913,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

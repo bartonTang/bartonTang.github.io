@@ -235,6 +235,141 @@
             
               
                 
+                <a class="post-title-link" href="/2017/01/18/自定义Cocoapods库制作/" itemprop="url">
+                  自定义CocoaPods库制作
+                </a>
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-01-18T21:24:22+08:00" content="2017-01-18">
+              2017-01-18
+            </time>
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                &nbsp; | &nbsp;
+                <a href="/2017/01/18/自定义Cocoapods库制作/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/01/18/自定义Cocoapods库制作/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+
+          
+          
+
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="自定义CocoaPods库制作"><a href="#自定义CocoaPods库制作" class="headerlink" title="自定义CocoaPods库制作"></a>自定义CocoaPods库制作</h2><p>CocoaPods的安装这里就不赘述了，各位童鞋自行google解决，记得是google而不是百度。</p>
+<h3 id="准备一个git-project"><a href="#准备一个git-project" class="headerlink" title="准备一个git project"></a>准备一个git project</h3><p>在自己的git server上先创建一个project。git server可以大家各自选择，github or 自己的git服务器都可以。我选择之前自己用Gogs搭建的一个git server。关于如何搭建自定义git server，请点击<br><a href="http://bartontang.github.io/2016/12/23/%E8%AE%B0%E5%BD%95Gogs%E6%90%AD%E5%BB%BA/" target="_blank" rel="external">记录Gogs搭建</a><br>我这里就把它命名为CoreKit，里面依赖了网络框架库Alamofire, Pod文件内容如下：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">project <span class="string">'CoreKit.xcodeproj'</span></div><div class="line"></div><div class="line"><span class="comment"># Uncomment this line to define a global platform for your project</span></div><div class="line">platform <span class="symbol">:ios</span>, <span class="string">'8.0'</span></div><div class="line"></div><div class="line">target <span class="string">'CoreKit'</span> <span class="keyword">do</span></div><div class="line">  <span class="comment"># Comment this line if you're not using Swift and don't want to use dynamic frameworks</span></div><div class="line">  use_frameworks!</div><div class="line"></div><div class="line">  <span class="comment"># Pods for CoreKit</span></div><div class="line">  </div><div class="line">  pod <span class="string">'Alamofire'</span>, <span class="string">'3.4.1'</span></div><div class="line">  </div><div class="line">  target <span class="string">'CoreKitTests'</span> <span class="keyword">do</span></div><div class="line">    inherit! <span class="symbol">:search_paths</span></div><div class="line">    <span class="comment"># Pods for testing</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line">  target <span class="string">'CoreKitUITests'</span> <span class="keyword">do</span></div><div class="line">    inherit! <span class="symbol">:search_paths</span></div><div class="line">    <span class="comment"># Pods for testing</span></div><div class="line">  <span class="keyword">end</span></div><div class="line"></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>这个地方非常简单。<br>执行pod install，并且增加一些很简单的测试代码。最终工程目录如下所示：<br><img src="http://o98au0nko.bkt.clouddn.com/%E8%87%AA%E5%AE%9A%E4%B9%89CocoaPods%E5%BA%93%E5%88%B6%E4%BD%9C_img1.png" alt=""></p>
+<p>这里就是个单例，然后public了个test的方法，并且print形参。</p>
+<h3 id="编写podspec文件"><a href="#编写podspec文件" class="headerlink" title="编写podspec文件"></a>编写podspec文件</h3><p>命令行执行下面的命令来创建podspec文件：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod spec create CoreKit</div></pre></td></tr></table></figure>
+<p>然后你就能在对应的目录下看到相应的文件了，如下图所示：</p>
+<p><img src="http://o98au0nko.bkt.clouddn.com/%E8%87%AA%E5%AE%9A%E4%B9%89CocoaPods%E5%BA%93%E5%88%B6%E4%BD%9C_img2.png" alt=""></p>
+<p>使用Sublime text打开CoreKit.podspec文件，</p>
+<blockquote>
+<p>不要用文本编辑器<br>不要用文本编辑器<br>不要用文本编辑器</p>
+</blockquote>
+<p>重要的事情说三遍，6666~！</p>
+<p>至于podspec里面的参数说明相信我解释不如大家自行谷歌，我直接贴源码吧</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#  Be sure to run `pod spec lint CoreKit.podspec' to ensure this is a</span></div><div class="line"><span class="comment">#  valid spec and to remove all comments including this before submitting the spec.</span></div><div class="line"><span class="comment">#</span></div><div class="line"><span class="comment">#  To learn more about Podspec attributes see http://docs.cocoapods.org/specification.html</span></div><div class="line"><span class="comment">#  To see working Podspecs in the CocoaPods repo see https://github.com/CocoaPods/Specs/</span></div><div class="line"><span class="comment">#</span></div><div class="line"></div><div class="line">Pod::Spec.new <span class="keyword">do</span> <span class="params">|s|</span></div><div class="line"></div><div class="line">  <span class="comment"># ―――  Spec Metadata  ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></div><div class="line">  <span class="comment">#</span></div><div class="line">  <span class="comment">#  These will help people to find your library, and whilst it</span></div><div class="line">  <span class="comment">#  can feel like a chore to fill in it's definitely to your advantage. The</span></div><div class="line">  <span class="comment">#  summary should be tweet-length, and the description more in depth.</span></div><div class="line">  <span class="comment">#</span></div><div class="line"></div><div class="line">  s.name         = <span class="string">"CoreKit"</span></div><div class="line">  s.version      = <span class="string">"0.0.1"</span></div><div class="line">  s.summary      = <span class="string">"CoreKit，测试玩玩先"</span></div><div class="line"></div><div class="line">  <span class="comment"># This description is used to generate tags and improve search results.</span></div><div class="line">  <span class="comment">#   * Think: What does it do? Why did you write it? What is the focus?</span></div><div class="line">  <span class="comment">#   * Try to keep it short, snappy and to the point.</span></div><div class="line">  <span class="comment">#   * Write the description between the DESC delimiters below.</span></div><div class="line">  <span class="comment">#   * Finally, don't worry about the indent, CocoaPods strips it!</span></div><div class="line">  s.description  = <span class="string">"对项目的具体描述信息，可以比较随意，写一些装逼的话就好了"</span></div><div class="line"></div><div class="line">  s.homepage     = <span class="string">"随意，但是我直接用的是项目的git仓库地址"</span></div><div class="line">  <span class="comment"># s.screenshots  = "www.example.com/screenshots_1.gif", "www.example.com/screenshots_2.gif"</span></div><div class="line"></div><div class="line"></div><div class="line">  <span class="comment"># ―――  Spec License  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></div><div class="line">  <span class="comment">#</span></div><div class="line">  <span class="comment">#  Licensing your code is important. See http://choosealicense.com for more info.</span></div><div class="line">  <span class="comment">#  CocoaPods will detect a license file if there is a named LICENSE*</span></div><div class="line">  <span class="comment">#  Popular ones are 'MIT', 'BSD' and 'Apache License, Version 2.0'.</span></div><div class="line">  <span class="comment">#</span></div><div class="line"></div><div class="line">  <span class="comment"># s.license      = "MIT"</span></div><div class="line">  s.license      = &#123; <span class="symbol">:type</span> =&gt; <span class="string">"MIT"</span>, <span class="symbol">:file</span> =&gt; <span class="string">"LICENSE"</span> &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="comment"># ――― Author Metadata  ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></div><div class="line">  <span class="comment">#</span></div><div class="line">  <span class="comment">#  Specify the authors of the library, with email addresses. Email addresses</span></div><div class="line">  <span class="comment">#  of the authors are extracted from the SCM log. E.g. $ git log. CocoaPods also</span></div><div class="line">  <span class="comment">#  accepts just a name if you'd rather not provide an email address.</span></div><div class="line">  <span class="comment">#</span></div><div class="line">  <span class="comment">#  Specify a social_media_url where others can refer to, for example a twitter</span></div><div class="line">  <span class="comment">#  profile URL.</span></div><div class="line">  <span class="comment">#</span></div><div class="line"></div><div class="line">  s.author             = &#123; <span class="string">"bartonTang"</span> =&gt; <span class="string">"你的邮箱地址"</span> &#125;</div><div class="line">  <span class="comment"># Or just: s.author    = "bartonTang"</span></div><div class="line">  <span class="comment"># s.authors            = &#123; "bartonTang" =&gt; "472439901<span class="doctag">@qq</span>.com" &#125;</span></div><div class="line">  <span class="comment"># s.social_media_url   = "http://twitter.com/bartonTang"</span></div><div class="line"></div><div class="line">  <span class="comment"># ――― Platform Specifics ――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></div><div class="line">  <span class="comment">#</span></div><div class="line">  <span class="comment">#  If this Pod runs only on iOS or OS X, then specify the platform and</span></div><div class="line">  <span class="comment">#  the deployment target. You can optionally include the target after the platform.</span></div><div class="line">  <span class="comment">#</span></div><div class="line"></div><div class="line">  s.platform     = <span class="symbol">:ios</span>, <span class="string">"8.0"</span></div><div class="line">  <span class="comment"># s.platform     = :ios, "5.0"</span></div><div class="line"></div><div class="line">  <span class="comment">#  When using multiple platforms</span></div><div class="line">  <span class="comment"># s.ios.deployment_target = "5.0"</span></div><div class="line">  <span class="comment"># s.osx.deployment_target = "10.7"</span></div><div class="line">  <span class="comment"># s.watchos.deployment_target = "2.0"</span></div><div class="line">  <span class="comment"># s.tvos.deployment_target = "9.0"</span></div><div class="line"></div><div class="line"></div><div class="line">  <span class="comment"># ――― Source Location ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></div><div class="line">  <span class="comment">#</span></div><div class="line">  <span class="comment">#  Specify the location from where the source should be retrieved.</span></div><div class="line">  <span class="comment">#  Supports git, hg, bzr, svn and HTTP.</span></div><div class="line">  <span class="comment">#</span></div><div class="line"></div><div class="line">  s.source       = &#123; <span class="symbol">:git</span> =&gt; <span class="string">"你的git仓库地址"</span>, <span class="symbol">:tag</span> =&gt; <span class="string">"<span class="subst">#&#123;s.version&#125;</span>"</span> &#125;</div><div class="line"></div><div class="line"></div><div class="line">  <span class="comment"># ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></div><div class="line">  <span class="comment">#</span></div><div class="line">  <span class="comment">#  CocoaPods is smart about how it includes source code. For source files</span></div><div class="line">  <span class="comment">#  giving a folder will include any swift, h, m, mm, c &amp; cpp files.</span></div><div class="line">  <span class="comment">#  For header files it will include any header in the folder.</span></div><div class="line">  <span class="comment">#  Not including the public_header_files will make all headers public.</span></div><div class="line">  <span class="comment">#</span></div><div class="line"></div><div class="line">  s.source_files  = <span class="string">"CoreKit/Source/*.&#123;h, m&#125;"</span> <span class="comment">#, "CoreKit/**/*.&#123;h, m, swift&#125;"</span></div><div class="line">  <span class="comment"># s.exclude_files = "Classes/Exclude"</span></div><div class="line"></div><div class="line">  s.public_header_files = <span class="string">"CoreKit/Source/*.&#123;h, m&#125;"</span></div><div class="line"></div><div class="line"></div><div class="line">  <span class="comment"># ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></div><div class="line">  <span class="comment">#</span></div><div class="line">  <span class="comment">#  A list of resources included with the Pod. These are copied into the</span></div><div class="line">  <span class="comment">#  target bundle with a build phase script. Anything else will be cleaned.</span></div><div class="line">  <span class="comment">#  You can preserve files from being cleaned, please don't preserve</span></div><div class="line">  <span class="comment">#  non-essential files like tests, examples and documentation.</span></div><div class="line">  <span class="comment">#</span></div><div class="line"></div><div class="line">  <span class="comment"># s.resource  = "icon.png"</span></div><div class="line">  <span class="comment"># s.resources = "CoreKit/**/*.&#123;png,xib,storyboard&#125;"</span></div><div class="line"></div><div class="line">  <span class="comment"># s.preserve_paths = "FilesToSave", "MoreFilesToSave"</span></div><div class="line"></div><div class="line"></div><div class="line">  <span class="comment"># ――― Project Linking ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></div><div class="line">  <span class="comment">#</span></div><div class="line">  <span class="comment">#  Link your library with frameworks, or libraries. Libraries do not include</span></div><div class="line">  <span class="comment">#  the lib prefix of their name.</span></div><div class="line">  <span class="comment">#</span></div><div class="line"></div><div class="line">  <span class="comment"># s.framework  = "Foundation"</span></div><div class="line">  <span class="comment"># s.frameworks = "SomeFramework", "AnotherFramework"</span></div><div class="line"></div><div class="line">  <span class="comment"># s.library   = "iconv"</span></div><div class="line">  <span class="comment"># s.libraries = "iconv", "xml2"</span></div><div class="line"></div><div class="line"></div><div class="line">  <span class="comment"># ――― Project Settings ――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #</span></div><div class="line">  <span class="comment">#</span></div><div class="line">  <span class="comment">#  If your library depends on compiler flags you can set them in the xcconfig hash</span></div><div class="line">  <span class="comment">#  where they will only apply to your library. If you depend on other Podspecs</span></div><div class="line">  <span class="comment">#  you can include multiple dependencies to ensure it works.</span></div><div class="line"></div><div class="line">  s.requires_arc = <span class="literal">true</span></div><div class="line"></div><div class="line">  <span class="comment"># s.xcconfig = &#123; "HEADER_SEARCH_PATHS" =&gt; "$(SDKROOT)/usr/include/libxml2" &#125;</span></div><div class="line">  s.dependency <span class="string">'Alamofire'</span>, <span class="string">'3.4.1'</span></div><div class="line"><span class="keyword">end</span></div></pre></td></tr></table></figure>
+<p>OK，上面这里因为涉及到一些个人信息神马的，有些我换成了描述，具体有：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">s.homepage = <span class="string">"随意，但是我直接用的是项目的git仓库地址"</span></div><div class="line">s.author  = &#123; <span class="string">"bartonTang"</span> =&gt; <span class="string">"你的邮箱地址"</span> &#125;</div><div class="line">s.source  = &#123; <span class="symbol">:git</span> =&gt; <span class="string">"你的git仓库地址"</span>, <span class="symbol">:tag</span> =&gt; <span class="string">"<span class="subst">#&#123;s.version&#125;</span>"</span> &#125;</div></pre></td></tr></table></figure>
+<p>上面这些东西大家换成和自己对应的东西就好了。<br>下面说几个坑：</p>
+<ol>
+<li>CocoaPods是根据tag来做管理的，那么那个tag标签就很重要，一定要记得。</li>
+<li>s.license 不可缺省，而且最好指定license文件。</li>
+<li>s.source_files源文件的路径，是相对podspec文件而言的。</li>
+<li>s.frameworks需要用到的frameworks，不用再加.frameworks后缀。</li>
+</ol>
+<p>写完podspec文件后对podspec文件进行检查，命令行在当前目录下执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">pod lib lint</div></pre></td></tr></table></figure>
+<p>如果有错的话好好修改下，一般不会有太大问题。成功后会出现类似：<br>xxx passed validation.</p>
+<p>记得提交好你的工程到git server并且记得tag值要和podspec文件里的一致。</p>
+<h3 id="在Test工程中引入自定义库"><a href="#在Test工程中引入自定义库" class="headerlink" title="在Test工程中引入自定义库"></a>在Test工程中引入自定义库</h3><p>创建一个TestPodsRef工程，并且引入自定义pod库</p>
+<p>pod ‘CoreKit’, :git =&gt; ‘你的pod库所在的git server地址’</p>
+<p>执行pod install。</p>
+<p>最终应该都是可以测试成功调用方法的，如果不行，请注意刚才提到的那些坑。<br>最终运行结果如下图：<br><img src="http://o98au0nko.bkt.clouddn.com/%E8%87%AA%E5%AE%9A%E4%B9%89CocoaPods%E5%BA%93%E5%88%B6%E4%BD%9C_img3.png" alt=""></p>
+<p>OK，回头有空再补充在github上那种，当然这种其实对项目私密保护性更好吧，不过就不开源啦~~~666</p>
+<p>App微服务化的第一步就此迈出，吹逼ing~</p>
+
+          
+        
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <div>
+      
+    </div>
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+
+
+    
+      
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                
                 <a class="post-title-link" href="/2016/12/23/记录Gogs搭建/" itemprop="url">
                   记录Gogs搭建
                 </a>
@@ -655,113 +790,6 @@
 
 
     
-      
-
-  
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-            
-            
-              
-                
-                <a class="post-title-link" href="/2016/08/22/beego-orm-操作-mysql/" itemprop="url">
-                  beego orm 操作(mysql)
-                </a>
-              
-            
-          </h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            <span class="post-meta-item-icon">
-              <i class="fa fa-calendar-o"></i>
-            </span>
-            <span class="post-meta-item-text">发表于</span>
-            <time itemprop="dateCreated" datetime="2016-08-22T20:30:09+08:00" content="2016-08-22">
-              2016-08-22
-            </time>
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                &nbsp; | &nbsp;
-                <a href="/2016/08/22/beego-orm-操作-mysql/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/22/beego-orm-操作-mysql/" itemprop="commentsCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-
-          
-          
-
-          
-        </div>
-      </header>
-    
-
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="beego-orm-操作-mysql"><a href="#beego-orm-操作-mysql" class="headerlink" title="beego orm 操作(mysql)"></a>beego orm 操作(mysql)</h2><p>继续对beego的orm操作的学习。<br>首先我们对之前的代码做一下改动，以下是main.go，其实逻辑不需要做任何更改，我只需要对注册数据库的地方做个小修改</p>
-<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> main</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">	<span class="string">"github.com/astaxie/beego/orm"</span></div><div class="line">	_ <span class="string">"github.com/go-sql-driver/mysql"</span></div><div class="line">	_ <span class="string">"github.com/mattn/go-sqlite3"</span></div><div class="line">	_ <span class="string">"quickstart/routers"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">var</span> dbuser <span class="keyword">string</span> = <span class="string">"root"</span>       <span class="comment">//数据库用户名</span></div><div class="line"><span class="keyword">var</span> dbpassword <span class="keyword">string</span> = <span class="string">"123456"</span> <span class="comment">//数据库密码</span></div><div class="line"><span class="keyword">var</span> db <span class="keyword">string</span> = <span class="string">"ormtest"</span>        <span class="comment">//数据库名字</span></div><div class="line"></div><div class="line"><span class="comment">//自动建表</span></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">createTable</span><span class="params">()</span></span> &#123;</div><div class="line">	name := <span class="string">"default"</span>                          <span class="comment">//数据库别名</span></div><div class="line">	force := <span class="literal">false</span>                             <span class="comment">//不强制建数据库</span></div><div class="line">	verbose := <span class="literal">true</span>                            <span class="comment">//打印建表过程</span></div><div class="line">	err := orm.RunSyncdb(name, force, verbose) <span class="comment">//建表</span></div><div class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</div><div class="line">		beego.Error(err)</div><div class="line">	&#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</div><div class="line">	<span class="comment">// 注册sqlite3 Driver</span></div><div class="line">	<span class="comment">// orm.RegisterDataBase("default", "sqlite3", "data.db")</span></div><div class="line">	<span class="comment">//</span></div><div class="line">	<span class="comment">//</span></div><div class="line"></div><div class="line">	<span class="comment">// 注册mysql Driver</span></div><div class="line">	orm.RegisterDriver(<span class="string">"mysql"</span>, orm.DRMySQL)</div><div class="line">	<span class="comment">// 构造conn连接 用户名:密码@数据库地址+名称?字符集</span></div><div class="line">	conn := dbuser + <span class="string">":"</span> + dbpassword + <span class="string">"@/"</span> + db + <span class="string">"?charset=utf8"</span></div><div class="line">	beego.Info(conn)</div><div class="line">	<span class="comment">//注册数据库连接</span></div><div class="line">	orm.RegisterDataBase(<span class="string">"default"</span>, <span class="string">"mysql"</span>, conn)</div><div class="line">	createTable()</div><div class="line">&#125;</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</div><div class="line">	<span class="comment">// orm.RegisterDriver("mysql", orm.DRMySQL)</span></div><div class="line">	<span class="comment">// orm.RegisterDataBase("default", "mysql", "root:root@/orm_test?charset=utf8")</span></div><div class="line">	<span class="comment">//</span></div><div class="line"></div><div class="line">	beego.Run()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>从上面我们可以看到只需要对Driver进行替换即可~！换成对应的数据库驱动即可。<br>下面看下最终的几个主要执行效果：</p>
-<p>创建db<br><img src="http://o98au0nko.bkt.clouddn.com/go_orm_mysql_create1.png" alt=""></p>
-<p>插入数据<br><img src="http://o98au0nko.bkt.clouddn.com/go_orm_mysql_add.png" alt=""></p>
-<p>更新数据<br><img src="http://o98au0nko.bkt.clouddn.com/go_orm_mysql_update.png" alt=""></p>
-<p>url跟上次的是一样的~~！<br>最新完整的工程地址：<br><a href="https://github.com/bartontang/beego_orm_test" target="_blank" rel="external">https://github.com/bartontang/beego_orm_test</a></p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-
-
-    
   </section>
 
   
@@ -807,7 +835,7 @@
         <nav class="site-state motion-element">
           <div class="site-state-item site-state-posts">
             <a href="/archives">
-              <span class="site-state-item-count">14</span>
+              <span class="site-state-item-count">15</span>
               <span class="site-state-item-name">日志</span>
             </a>
           </div>
@@ -883,7 +911,7 @@
         <div class="copyright" >
   
   &copy; 
-  <span itemprop="copyrightYear">2016</span>
+  <span itemprop="copyrightYear">2017</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
