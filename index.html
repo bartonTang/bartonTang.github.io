@@ -5,11 +5,12 @@
   
 
 
-<html class="theme-next mist use-motion" lang="zh-Hans">
+<html class="theme-next gemini use-motion" lang="zh-Hans">
 <head>
   <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
 
 
 
@@ -74,7 +75,7 @@
 
 <link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
 
-<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
 
 
   <meta name="keywords" content="Hexo, NexT" />
@@ -86,7 +87,7 @@
 
 
 
-  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
 
 
 
@@ -106,12 +107,14 @@
   var NexT = window.NexT || {};
   var CONFIG = {
     root: '/',
-    scheme: 'Mist',
-    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    scheme: 'Gemini',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
     fancybox: true,
+    tabs: true,
     motion: true,
     duoshuo: {
-      userId: 'undefined',
+      userId: '0',
       author: '博主'
     },
     algolia: {
@@ -134,12 +137,6 @@
 
   <title>BartonTang的博客</title>
   
-
-
-
-
-
-
 
 
 
@@ -252,13 +249,161 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/12/beego-获取request-body内容/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Barton">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BartonTang的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/10/12/beego-获取request-body内容/" itemprop="url">beego 获取request body内容</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-12T10:18:46+08:00">
+                2017-10-12
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2017/10/12/beego-获取request-body内容/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2017/10/12/beego-获取request-body内容/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="beego-获取request-body内容"><a href="#beego-获取request-body内容" class="headerlink" title="beego 获取request body内容"></a>beego 获取request body内容</h1><h2 id="beego-获取request-body内容-1"><a href="#beego-获取request-body内容-1" class="headerlink" title="beego 获取request body内容"></a>beego 获取request body内容</h2><p>最近自己用beego写了点东西，发现一些坑，主要是获取http的request body的内容。开始一直在controller里面直接使用GetString之类的方法，后来才知道这个并不是raw data。后来翻了下官网发现其实有文档记录的<br><a href="https://beego.me/docs/mvc/controller/params.md#%E8%8E%B7%E5%8F%96-request-body-%E9%87%8C%E7%9A%84%E5%86%85%E5%AE%B9" target="_blank" rel="external">获取 Request Body 里的内容</a></p>
+<p>最后自己再封装下，上代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *BaseController)</span> <span class="title">RequestBody</span><span class="params">()</span> []<span class="title">byte</span></span> &#123;</div><div class="line">	<span class="keyword">return</span> this.Ctx.Input.RequestBody</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *BaseController)</span> <span class="title">decodeRawRequestBodyJson</span><span class="params">()</span> <span class="title">map</span>[<span class="title">string</span>]<span class="title">interface</span></span>&#123;&#125; &#123;</div><div class="line">	<span class="keyword">var</span> mm <span class="keyword">interface</span>&#123;&#125;</div><div class="line">	requestBody := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;)</div><div class="line">	json.Unmarshal(this.RequestBody(), &amp;mm)</div><div class="line">	<span class="keyword">if</span> mm != <span class="literal">nil</span> &#123;</div><div class="line">		<span class="keyword">var</span> m1 <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;</div><div class="line">		m1 = mm.(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;)</div><div class="line"></div><div class="line">		<span class="keyword">for</span> k, v := <span class="keyword">range</span> m1 &#123;</div><div class="line">			requestBody[k] = v</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="keyword">return</span> requestBody</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *BaseController)</span> <span class="title">JsonData</span><span class="params">()</span> <span class="title">map</span>[<span class="title">string</span>]<span class="title">interface</span></span>&#123;&#125; &#123;</div><div class="line">	<span class="keyword">return</span> this.decodeRawRequestBodyJson()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个是自己有个父类叫BaseController，全部controller都会继承它，之后在别的controller的地方使用的时候就可以如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">requestBody := this.JsonData()</div><div class="line"></div><div class="line">account := requestBody[<span class="string">"account"</span>].(<span class="keyword">string</span>)   <span class="comment">//this.GetString("account")</span></div><div class="line">password := requestBody[<span class="string">"password"</span>].(<span class="keyword">string</span>) <span class="comment">//this.GetString("password")</span></div></pre></td></tr></table></figure>
+<p>之前的简单Get方法就可以不要了~:-D</p>
+<h2 id="Api转换为小写丢回给Client"><a href="#Api转换为小写丢回给Client" class="headerlink" title="Api转换为小写丢回给Client"></a>Api转换为小写丢回给Client</h2><p>对于Go语言的大小写来作为是否为public标识的设计还是很不错的。但，人生总是充满着坑，作为一个良好的代码设计规范有些肯定是要统一遵守的。so，借用以前团队的规范，现在一般我定义的http的response的json结构如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">    rc: 0,          // 返回的code</div><div class="line">    msg: <span class="string">""</span>,        // 返回的描述</div><div class="line">    data: &#123;         // 返回的数据，可为null</div><div class="line">        ...</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样子应该是一个良好的设计。那么问题来了，beego里我们定义的Model类的变量肯定是大写开头的，因为你要在别的文件作调用（别聊getter和setter先），what the fuck，直接把某个对象设置为data就很蛋碎，你就会得到类似这样子的结构：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="string">"rc"</span>: 1,</div><div class="line">	<span class="string">"msg"</span>: <span class="string">"登陆成功"</span>,</div><div class="line">	<span class="string">"data"</span>: &#123;</div><div class="line">		<span class="string">"Id"</span>: 5,</div><div class="line">		<span class="string">"Name"</span>: <span class="string">""</span>,</div><div class="line">		<span class="string">"RegisterTime"</span>: 1505806765,</div><div class="line">		<span class="string">"Vip"</span>: <span class="literal">false</span>,</div><div class="line">		<span class="string">"VipStartTime"</span>: 0,</div><div class="line">		<span class="string">"VipEndTime"</span>: 0</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>全大写这是在逗我呢，好诡异，查了下原来有个办法就是在struct定义的时候给个tag值就好了</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">type</span> User <span class="keyword">struct</span> &#123;</div><div class="line">	Id           <span class="keyword">int</span>    <span class="string">`orm:"pk;auto" json:"id"`</span></div><div class="line">	Name         <span class="keyword">string</span> <span class="string">`json:"name"`</span></div><div class="line">	RegisterTime <span class="keyword">int64</span>  <span class="string">`json:"register_time"`</span></div><div class="line">	Phone        <span class="keyword">string</span> <span class="string">`json:"phone"`</span></div><div class="line">	Password     <span class="keyword">string</span> <span class="string">`json:"password"`</span></div><div class="line">	IsVip        <span class="keyword">bool</span>   <span class="string">`json:"vip"`</span></div><div class="line">	VipStartTime <span class="keyword">int64</span>  <span class="string">`json:"vip_start_time"`</span></div><div class="line">	VipEndTime   <span class="keyword">int64</span>  <span class="string">`json:"vip_end_time"`</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样子得到的response就是如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&#123;</div><div class="line">	<span class="string">"rc"</span>: 1,</div><div class="line">	<span class="string">"msg"</span>: <span class="string">"登陆成功"</span>,</div><div class="line">	<span class="string">"data"</span>: &#123;</div><div class="line">		<span class="string">"id"</span>: 5,</div><div class="line">		<span class="string">"name"</span>: <span class="string">""</span>,</div><div class="line">		<span class="string">"register_time"</span>: 1505806765,</div><div class="line">		<span class="string">"password"</span>: <span class="string">"MjY4MTMyMmNjZjAwOTRiZGJjNTA2MjFjYzcwOTY0YzE1ZjE5ZjE0ZTU5OTY="</span>,</div><div class="line">		<span class="string">"vip"</span>: <span class="literal">false</span>,</div><div class="line">		<span class="string">"vip_start_time"</span>: 0,</div><div class="line">		<span class="string">"vip_end_time"</span>: 0</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>nice，不错，看起来舒服多了~~~<br>O(∩_∩)O先记录到这里~</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/18/iOS-App架构上的一些具体设计/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Barton">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://o98au0nko.bkt.clouddn.com/1.jpg">
+      <meta itemprop="image" content="/images/1.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -323,6 +468,9 @@
       </header>
     
 
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -349,18 +497,15 @@
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
     <footer class="post-footer">
       
@@ -374,6 +519,10 @@
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -386,13 +535,17 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/01/18/自定义Cocoapods库制作/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Barton">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://o98au0nko.bkt.clouddn.com/1.jpg">
+      <meta itemprop="image" content="/images/1.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -457,6 +610,9 @@
       </header>
     
 
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -505,18 +661,15 @@
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
     <footer class="post-footer">
       
@@ -530,6 +683,10 @@
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -542,13 +699,17 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/12/23/记录Gogs搭建/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Barton">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://o98au0nko.bkt.clouddn.com/1.jpg">
+      <meta itemprop="image" content="/images/1.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -613,6 +774,9 @@
       </header>
     
 
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -629,18 +793,15 @@
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
     <footer class="post-footer">
       
@@ -654,6 +815,10 @@
         <div class="post-eof"></div>
       
     </footer>
+  </div>
+  
+  
+  
   </article>
 
 
@@ -666,13 +831,17 @@
   
   
 
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/06/更好的模式，更轻量级的UITableView/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Barton">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://o98au0nko.bkt.clouddn.com/1.jpg">
+      <meta itemprop="image" content="/images/1.jpg">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -737,6 +906,9 @@
       </header>
     
 
+    
+    
+    
     <div class="post-body" itemprop="articleBody">
 
       
@@ -764,18 +936,15 @@
         
       
     </div>
+    
+    
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
-    <div>
-      
-    </div>
+    
 
     <footer class="post-footer">
       
@@ -789,146 +958,10 @@
         <div class="post-eof"></div>
       
     </footer>
-  </article>
-
-
-    
-      
-
-  
-
+  </div>
   
   
   
-
-  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/11/iOS工程第三方代码包管理/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Barton">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="http://o98au0nko.bkt.clouddn.com/1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BartonTang的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/09/11/iOS工程第三方代码包管理/" itemprop="url">iOS工程第三方代码包管理</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-09-11T20:39:23+08:00">
-                2016-09-11
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/09/11/iOS工程第三方代码包管理/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/09/11/iOS工程第三方代码包管理/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="iOS工程第三方代码包管理"><a href="#iOS工程第三方代码包管理" class="headerlink" title="iOS工程第三方代码包管理"></a>iOS工程第三方代码包管理</h2><p>在我们的实际开发过程中，多多少少会去引用别人成熟的代码库，自己完全造轮子这是不现实的。问题来了，怎么把这些第三方代码引入到自己的工程，以前咧，直接拖代码呗，恩~but这得多蛋疼呢~合适的管理代码包工具是很必要的。<br>现有的在github上的项目主要支持的工具就是Cocoapods，还有一个就是Carthage。Cocoapods的教程非常之多，各位自行面向百度编程，面向谷歌编程 or RTFM。</p>
-<h3 id="Carthage"><a href="#Carthage" class="headerlink" title="Carthage"></a>Carthage</h3><p>Carthage的github主页为  <a href="https://github.com/Carthage/Carthage.git" target="_blank" rel="external">https://github.com/Carthage/Carthage.git</a> </p>
-<p>CocoaPods会直接创建和修改项目的workspace配置，而Carthage的特点是灵活，耦合度不高，集成时不需要集成相应的project，不需要创建workspace，只要依赖打包好的framework文件就可以了。</p>
-<h3 id="安装使用Carthage"><a href="#安装使用Carthage" class="headerlink" title="安装使用Carthage"></a>安装使用Carthage</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo brew install carthage</div></pre></td></tr></table></figure>
-<p>安装完成后，执行carthage version<br>即可看到carthage的版本</p>
-<p>接下来就是通过carthage管理第三方库。<br>cd到你的项目位置，然后使用touch Carfile，创建一个Carfile文件。<br>使用Xcode打开Carfile，编辑你需要加入的第三方库，要看清楚该第三方库是否支持Carfile哦，一般比较正式的包都会支持的。<br>在文件中加入：</p>
-<blockquote>
-<p>github “Alamofire/Alamofire” ~&gt; 3.0</p>
-</blockquote>
-<p>版本含义：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">~&gt; 3.0 表示使用版本3.0以上但是低于4.0的最新版本，如3.5, 3.9</div><div class="line"></div><div class="line">&gt;== 3.0 表示使用3.0版本</div><div class="line"></div><div class="line">&gt;= 3.0表示使用3.0或更高的版本</div></pre></td></tr></table></figure>
-<p>如果你没有指明版本号，则会自动使用最新的版本。<br>写好后保存文件，执行以下命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">carthage update --platform iOS</div></pre></td></tr></table></figure>
-<p>carthage会为你下载和编译所需要的第三方库，当命令执行完毕，在你的项目文件夹中会创建一个名为Carthage的文件夹</p>
-<p>在 ~/Carthage/Build/iOS里会出现xxx.framework文件已经为你创建好了。<br>下图就是构件好的framwork显示：<br><img src="http://o98au0nko.bkt.clouddn.com/iOS_carthage_1.png" alt=""></p>
-<p>然后把framwork拖入到以下位置，并且构建一个run script，如图所示：<br><img src="http://o98au0nko.bkt.clouddn.com/iOS_carthage_2.png" alt=""></p>
-<p>最终你就可以在代码中直接import Alamofire 使用了~~</p>
-<h3 id="深坑"><a href="#深坑" class="headerlink" title="深坑"></a>深坑</h3><p>这里说个深坑：情景是升级了下Xcode。恩，git 拉项目代码下来，非常nice，模拟器运行的很好，烧真机吧~shit~！闪退~！你会发现报错，framework链接问题，没错，你看到的是链接问题~！模拟器很好，真机很蛋疼。开始以为是Cocoapods的问题，后来换成了Carthage，最后各种排查，这些问题在Stack Overflow上有写但都不适用我的情况！看到有人说可能是证书配置，我在想没动过证书呀，进去钥匙串看一下，发现为什么之前所有的证书都报告来源于非正常的证书颁发机构，最终发现苹果的Apple Worldwide Developer Relations Certification Authority 的证书没有了，应该是更新Xcode的时候被干掉了。。。恶心啊~~！</p>
-<p>最终下载Apple Worldwide Developer Relations Certification Authority证书，打包真机，非常nice~~！！世界终于清静，该睡觉了~！</p>
-
-          
-        
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <div>
-      
-    </div>
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
   </article>
 
 
@@ -971,7 +1004,7 @@
       <section class="site-overview sidebar-panel sidebar-panel-active">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
-               src="http://o98au0nko.bkt.clouddn.com/1.jpg"
+               src="/images/1.jpg"
                alt="Barton" />
           <p class="site-author-name" itemprop="name">Barton</p>
            
@@ -982,8 +1015,10 @@
 
           
             <div class="site-state-item site-state-posts">
+            
               <a href="/archives/">
-                <span class="site-state-item-count">16</span>
+            
+                <span class="site-state-item-count">17</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1010,29 +1045,13 @@
           
             
               <span class="links-of-author-item">
-                <a href="https://github.com/bartonTang" target="_blank" title="GitHub">
+                <a href="https://github.com/bartontang" target="_blank" title="GitHub">
                   
                     <i class="fa fa-fw fa-github"></i>
                   
-                  GitHub
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://twitter.com/barton0205" target="_blank" title="Twitter">
-                  
-                    <i class="fa fa-fw fa-twitter"></i>
-                  
-                  Twitter
-                </a>
-              </span>
-            
-              <span class="links-of-author-item">
-                <a href="https://www.linkedin.com/home?trk=nav_responsive_tab_home" target="_blank" title="Linkedin">
-                  
-                    <i class="fa fa-fw fa-linkedin"></i>
-                  
-                  Linkedin
+                    
+                      GitHub
+                    
                 </a>
               </span>
             
@@ -1072,22 +1091,25 @@
     <i class="fa fa-heart"></i>
   </span>
   <span class="author" itemprop="copyrightHolder">Barton</span>
+
+  
 </div>
 
 
-<div class="powered-by">
-  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
-</div>
+  <div class="powered-by">由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动</div>
 
-<div class="theme-info">
-  主题 -
-  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
-    NexT.Mist
-  </a>
-</div>
+  <span class="post-meta-divider">|</span>
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">NexT.Gemini</a> v5.1.2</div>
 
 
         
+
+
+
+
+
+
 
         
       </div>
@@ -1153,25 +1175,32 @@
   
 
 
-  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
 
-  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
 
 
 
   
-  
-
-  
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
-<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
 
   
 
   
 
 
-  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
 
 
 
@@ -1195,21 +1224,24 @@
   </script>
 
   
-
-
-
-
-
-
-
-
-
-
-
-
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
   
-    <script id="cy_cmt_num" src="https://changyan.sohu.com/upload/plugins/plugins.list.count.js?clientId=cyt7snsCY"></script>
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -1245,8 +1277,6 @@
   
 
   
-  <script type="text/javascript" src="/js/src/exturl.js?v=5.1.1"></script>
-
 
 </body>
 </html>
