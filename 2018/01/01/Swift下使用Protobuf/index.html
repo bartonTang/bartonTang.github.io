@@ -1,0 +1,772 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.2" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="iOS," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.2" />
+
+
+
+
+
+
+<meta name="description" content="Swift下使用Protobuf新年伊始，大家元旦快乐！
+进入主题：Swift下使用Protobuf，属于扫盲贴，仅此记录过程。
+对于protobuf不算太陌生但也不算非常6。之前玩cocos的时候C/S通信协议就是用的protobuf，因为是游戏对于消息的解析速度和大小要求还是比较高的，所以一般稍微大点的游戏都不会采用xml或者json这些可读性很强的序列化格式，之前有个项目组有的是amf3（不">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Swift下使用Protobuf">
+<meta property="og:url" content="http://yoursite.com/2018/01/01/Swift下使用Protobuf/index.html">
+<meta property="og:site_name" content="BartonTang的博客">
+<meta property="og:description" content="Swift下使用Protobuf新年伊始，大家元旦快乐！
+进入主题：Swift下使用Protobuf，属于扫盲贴，仅此记录过程。
+对于protobuf不算太陌生但也不算非常6。之前玩cocos的时候C/S通信协议就是用的protobuf，因为是游戏对于消息的解析速度和大小要求还是比较高的，所以一般稍微大点的游戏都不会采用xml或者json这些可读性很强的序列化格式，之前有个项目组有的是amf3（不">
+<meta property="og:updated_time" content="2018-01-01T15:07:12.947Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Swift下使用Protobuf">
+<meta name="twitter:description" content="Swift下使用Protobuf新年伊始，大家元旦快乐！
+进入主题：Swift下使用Protobuf，属于扫盲贴，仅此记录过程。
+对于protobuf不算太陌生但也不算非常6。之前玩cocos的时候C/S通信协议就是用的protobuf，因为是游戏对于消息的解析速度和大小要求还是比较高的，所以一般稍微大点的游戏都不会采用xml或者json这些可读性很强的序列化格式，之前有个项目组有的是amf3（不">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.2',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/01/01/Swift下使用Protobuf/"/>
+
+
+
+
+
+  <title>Swift下使用Protobuf | BartonTang的博客</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">BartonTang的博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/01/Swift下使用Protobuf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Barton">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BartonTang的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Swift下使用Protobuf</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-01T22:26:39+08:00">
+                2018-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/01/Swift下使用Protobuf/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/01/Swift下使用Protobuf/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Swift下使用Protobuf"><a href="#Swift下使用Protobuf" class="headerlink" title="Swift下使用Protobuf"></a>Swift下使用Protobuf</h1><p>新年伊始，大家元旦快乐！</p>
+<p>进入主题：Swift下使用Protobuf，属于扫盲贴，仅此记录过程。</p>
+<p>对于protobuf不算太陌生但也不算非常6。之前玩cocos的时候C/S通信协议就是用的protobuf，因为是游戏对于消息的解析速度和大小要求还是比较高的，所以一般稍微大点的游戏都不会采用xml或者json这些可读性很强的序列化格式，之前有个项目组有的是amf3（不要问为啥，因为忒么人家是页游，当年AS3火的一塌糊涂），有个组是自己写二进制序列化和反序列化（默默滴说句：这种活吃力不讨好，看着他们天天对协议感觉好累）。</p>
+<p>之后新开项目的时候我推荐大家使用protobuf，开始是在C++项目上使用，之后又在lua项目上使用，那时候用的是protobuf2.5，之后出了3.X的版本不过之后没有用到这一块所以也就不怎么了解，之后如果深入会继续记录下来学习之。</p>
+<p><strong>当然很感谢那些年一起的朋友们，大家新年好！</strong></p>
+<p>好，先装protobuf，下载链接地址：<br><a href="https://github.com/google/protobuf/releases" target="_blank" rel="external">https://github.com/google/protobuf/releases</a></p>
+<p>选个版本来自己下载，下载完后解压之。进入到swift-protobuf文件夹下，非常C风格的make，依次执行如下命令:<br><code>./configure
+make
+make check
+sudo make install</code></p>
+<p>正常执行完后输入protoc –version<br>得到结果：libprotoc 3.5.1<br>我装的是3.5.1版本，so安装成功。</p>
+<p>我们看下帮助<br><code>protoc --help</code><br>可以看到现在支持很多语言的导出：</p>
+<figure class="highlight plain"><figcaption><span>Generate C++ header and source.</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">--csharp_out=OUT_DIR        Generate C# source file.</div><div class="line">--java_out=OUT_DIR          Generate Java source file.</div><div class="line">--javanano_out=OUT_DIR      Generate Java Nano source file.</div><div class="line">--js_out=OUT_DIR            Generate JavaScript source.</div><div class="line">--objc_out=OUT_DIR          Generate Objective C header and source.</div><div class="line">--php_out=OUT_DIR           Generate PHP source file.</div><div class="line">--python_out=OUT_DIR        Generate Python source file.</div><div class="line">--ruby_out=OUT_DIR          Generate Ruby source file.</div></pre></td></tr></table></figure>
+<p>没有swift，但有Objective-C，but不打算通过构建bridge来互相调用，只想直接导出swift。Apple其实已经帮大家做了个很好的仓库：<br><a href="https://github.com/apple/swift-protobuf" target="_blank" rel="external">https://github.com/apple/swift-protobuf</a></p>
+<p>安装过程也非常简单。git clone仓库下来，cd到swift-protobuf仓库目录下执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">swift build -c release -Xswiftc -static-stdlib</div></pre></td></tr></table></figure>
+<p>成功之后，我们来随便写个proto文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line">package Im;   </div><div class="line"></div><div class="line">message helloworld   </div><div class="line">&#123;   </div><div class="line">     int32     id = 1;  // ID     </div><div class="line">     string    str = 2;  // str    </div><div class="line">     int32     opt = 3;  //optional field   </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>OK，现在cd到proto文件所在文件夹，直接运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">protoc *.proto --swift_out=/Users/apple/Desktop</div></pre></td></tr></table></figure>
+<p>这样子在桌面就生成了一个msg.pb.swift文件，接下来xcode new a project，直接丢这个生成好的文件进工程，因为我使用的cocoapod方式来集成framwork，所以直接Podfile文件下加一句<br><strong>pod ‘SwiftProtobuf’</strong><br>更新完pod后直接上代码测试。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  ViewController.swift</span></div><div class="line"><span class="comment">//  TestProtobuf</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  Created by apple on 2018/1/1.</span></div><div class="line"><span class="comment">//  Copyright © 2018年 apple. All rights reserved.</span></div><div class="line"><span class="comment">//</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> UIKit</div><div class="line"><span class="keyword">import</span> SwiftProtobuf</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ViewController</span>: <span class="title">UIViewController</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.viewDidLoad()</div><div class="line">        <span class="comment">// Do any additional setup after loading the view, typically from a nib.</span></div><div class="line">        testProtobuf()</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">didReceiveMemoryWarning</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.didReceiveMemoryWarning()</div><div class="line">        <span class="comment">// Dispose of any resources that can be recreated.</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">testProtobuf</span><span class="params">()</span></span> -&gt; <span class="type">Void</span> &#123;</div><div class="line">        <span class="keyword">var</span> obj = <span class="type">Im_helloworld</span>()</div><div class="line">        obj.id = <span class="number">21</span></div><div class="line">        obj.opt = <span class="number">12</span></div><div class="line">        obj.str = <span class="string">"dkdk"</span></div><div class="line">        </div><div class="line">        <span class="keyword">do</span> &#123;</div><div class="line">            <span class="keyword">let</span> protoData: <span class="type">Data</span> = <span class="keyword">try</span> obj.serializedData()</div><div class="line">            <span class="built_in">print</span>(<span class="string">"生成的二进制大小为：<span class="subst">\(protoData.<span class="built_in">count</span>)</span> bytes"</span>)</div><div class="line">            </div><div class="line">            <span class="keyword">let</span> decodedInfo = <span class="keyword">try</span> <span class="type">Im_helloworld</span>(serializedData: protoData)</div><div class="line">            <span class="built_in">print</span>(<span class="string">"decodedInfo str = <span class="subst">\(decodedInfo.str)</span>"</span>)</div><div class="line">            <span class="built_in">print</span>(<span class="string">"decodedInfo opt = <span class="subst">\(decodedInfo.opt)</span>"</span>)</div><div class="line">            <span class="built_in">print</span>(<span class="string">"decodedInfo id = <span class="subst">\(decodedInfo.id)</span>"</span>)</div><div class="line">        &#125; <span class="keyword">catch</span> &#123;</div><div class="line">            <span class="built_in">print</span>(error)</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>获得如下输出：</p>
+<p>生成的二进制大小为：10 bytes<br>decodedInfo str = dkdk<br>decodedInfo opt = 12<br>decodedInfo id = 21</p>
+<p>坑：<br>对于直接丢framework到Xcode工程的童鞋，<br><strong>记住千万不要直接拖到工程目录<br>记住千万不要直接拖到工程目录<br>记住千万不要直接拖到工程目录</strong></p>
+<p>因为你需要在General – Embedded Binaries中添加编译出的SwiftProtobuf.framework<br>如果，直接拖拽到工程中使用，会报错：<br>dyld: Library not loaded: @rpath/SwiftProtobuf.framework/SwiftProtobuf<br>Referenced from: /var/containers/Bundle/Application/<strong><em>**</em></strong>/ProductsName.app/ProductsName<br>Reason: image not found</p>
+<p>OK，先简单这样。<br>之后看看golang的导出和简单使用，大概猜到我要干啥了吧~<br>gRPC，木有错~！！<br>新一年继续努力吧</p>
+<p>参考链接：<br>链接：<a href="https://www.jianshu.com/p/751aa2b621d5" target="_blank" rel="external">https://www.jianshu.com/p/751aa2b621d5</a><br>作者：y824165978</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/10/12/beego-获取request-body内容/" rel="next" title="beego 获取request body内容">
+                <i class="fa fa-chevron-left"></i> beego 获取request body内容
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div class="ds-thread" data-thread-key="2018/01/01/Swift下使用Protobuf/"
+           data-title="Swift下使用Protobuf" data-url="http://yoursite.com/2018/01/01/Swift下使用Protobuf/">
+      </div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/1.jpg"
+               alt="Barton" />
+          <p class="site-author-name" itemprop="name">Barton</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+            
+              <a href="/archives/">
+            
+                <span class="site-state-item-count">18</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">3</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/bartontang" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                    
+                      GitHub
+                    
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Swift下使用Protobuf"><span class="nav-number">1.</span> <span class="nav-text">Swift下使用Protobuf</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy;  2016 &mdash; 
+  <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Barton</span>
+
+  
+</div>
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.2"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.2"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.2"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.2"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.2"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.2"></script>
+
+
+
+  
+
+  
+    
+  
+
+  <script type="text/javascript">
+    var duoshuoQuery = {short_name:"bartontang"};
+    (function() {
+      var ds = document.createElement('script');
+      ds.type = 'text/javascript';ds.async = true;
+      ds.id = 'duoshuo-script';
+      ds.src = (document.location.protocol == 'https:' ? 'https:' : 'http:') + '//static.duoshuo.com/embed.js';
+      ds.charset = 'UTF-8';
+      (document.getElementsByTagName('head')[0]
+      || document.getElementsByTagName('body')[0]).appendChild(ds);
+    })();
+  </script>
+
+  
+    
+    
+    <script src="/lib/ua-parser-js/dist/ua-parser.min.js?v=0.7.9"></script>
+    <script src="/js/src/hook-duoshuo.js"></script>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+<script>
+(function(){
+    var bp = document.createElement('script');
+    var curProtocol = window.location.protocol.split(':')[0];
+    if (curProtocol === 'https') {
+        bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';        
+    }
+    else {
+        bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+    }
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(bp, s);
+})();
+</script>
+
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -264,6 +264,163 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/01/01/Swift下使用Protobuf/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Barton">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BartonTang的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/01/01/Swift下使用Protobuf/" itemprop="url">Swift下使用Protobuf</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-01-01T22:26:39+08:00">
+                2018-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2018/01/01/Swift下使用Protobuf/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2018/01/01/Swift下使用Protobuf/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h1 id="Swift下使用Protobuf"><a href="#Swift下使用Protobuf" class="headerlink" title="Swift下使用Protobuf"></a>Swift下使用Protobuf</h1><p>新年伊始，大家元旦快乐！</p>
+<p>进入主题：Swift下使用Protobuf，属于扫盲贴，仅此记录过程。</p>
+<p>对于protobuf不算太陌生但也不算非常6。之前玩cocos的时候C/S通信协议就是用的protobuf，因为是游戏对于消息的解析速度和大小要求还是比较高的，所以一般稍微大点的游戏都不会采用xml或者json这些可读性很强的序列化格式，之前有个项目组有的是amf3（不要问为啥，因为忒么人家是页游，当年AS3火的一塌糊涂），有个组是自己写二进制序列化和反序列化（默默滴说句：这种活吃力不讨好，看着他们天天对协议感觉好累）。</p>
+<p>之后新开项目的时候我推荐大家使用protobuf，开始是在C++项目上使用，之后又在lua项目上使用，那时候用的是protobuf2.5，之后出了3.X的版本不过之后没有用到这一块所以也就不怎么了解，之后如果深入会继续记录下来学习之。</p>
+<p><strong>当然很感谢那些年一起的朋友们，大家新年好！</strong></p>
+<p>好，先装protobuf，下载链接地址：<br><a href="https://github.com/google/protobuf/releases" target="_blank" rel="external">https://github.com/google/protobuf/releases</a></p>
+<p>选个版本来自己下载，下载完后解压之。进入到swift-protobuf文件夹下，非常C风格的make，依次执行如下命令:<br><code>./configure
+make
+make check
+sudo make install</code></p>
+<p>正常执行完后输入protoc –version<br>得到结果：libprotoc 3.5.1<br>我装的是3.5.1版本，so安装成功。</p>
+<p>我们看下帮助<br><code>protoc --help</code><br>可以看到现在支持很多语言的导出：</p>
+<figure class="highlight plain"><figcaption><span>Generate C++ header and source.</span></figcaption><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">--csharp_out=OUT_DIR        Generate C# source file.</div><div class="line">--java_out=OUT_DIR          Generate Java source file.</div><div class="line">--javanano_out=OUT_DIR      Generate Java Nano source file.</div><div class="line">--js_out=OUT_DIR            Generate JavaScript source.</div><div class="line">--objc_out=OUT_DIR          Generate Objective C header and source.</div><div class="line">--php_out=OUT_DIR           Generate PHP source file.</div><div class="line">--python_out=OUT_DIR        Generate Python source file.</div><div class="line">--ruby_out=OUT_DIR          Generate Ruby source file.</div></pre></td></tr></table></figure>
+<p>没有swift，但有Objective-C，but不打算通过构建bridge来互相调用，只想直接导出swift。Apple其实已经帮大家做了个很好的仓库：<br><a href="https://github.com/apple/swift-protobuf" target="_blank" rel="external">https://github.com/apple/swift-protobuf</a></p>
+<p>安装过程也非常简单。git clone仓库下来，cd到swift-protobuf仓库目录下执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">swift build -c release -Xswiftc -static-stdlib</div></pre></td></tr></table></figure>
+<p>成功之后，我们来随便写个proto文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">syntax = &quot;proto3&quot;;</div><div class="line">package Im;   </div><div class="line"></div><div class="line">message helloworld   </div><div class="line">&#123;   </div><div class="line">     int32     id = 1;  // ID     </div><div class="line">     string    str = 2;  // str    </div><div class="line">     int32     opt = 3;  //optional field   </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>OK，现在cd到proto文件所在文件夹，直接运行</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">protoc *.proto --swift_out=/Users/apple/Desktop</div></pre></td></tr></table></figure>
+<p>这样子在桌面就生成了一个msg.pb.swift文件，接下来xcode new a project，直接丢这个生成好的文件进工程，因为我使用的cocoapod方式来集成framwork，所以直接Podfile文件下加一句<br><strong>pod ‘SwiftProtobuf’</strong><br>更新完pod后直接上代码测试。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  ViewController.swift</span></div><div class="line"><span class="comment">//  TestProtobuf</span></div><div class="line"><span class="comment">//</span></div><div class="line"><span class="comment">//  Created by apple on 2018/1/1.</span></div><div class="line"><span class="comment">//  Copyright © 2018年 apple. All rights reserved.</span></div><div class="line"><span class="comment">//</span></div><div class="line"></div><div class="line"><span class="keyword">import</span> UIKit</div><div class="line"><span class="keyword">import</span> SwiftProtobuf</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ViewController</span>: <span class="title">UIViewController</span> </span>&#123;</div><div class="line"></div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">viewDidLoad</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.viewDidLoad()</div><div class="line">        <span class="comment">// Do any additional setup after loading the view, typically from a nib.</span></div><div class="line">        testProtobuf()</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">func</span> <span class="title">didReceiveMemoryWarning</span><span class="params">()</span></span> &#123;</div><div class="line">        <span class="keyword">super</span>.didReceiveMemoryWarning()</div><div class="line">        <span class="comment">// Dispose of any resources that can be recreated.</span></div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">testProtobuf</span><span class="params">()</span></span> -&gt; <span class="type">Void</span> &#123;</div><div class="line">        <span class="keyword">var</span> obj = <span class="type">Im_helloworld</span>()</div><div class="line">        obj.id = <span class="number">21</span></div><div class="line">        obj.opt = <span class="number">12</span></div><div class="line">        obj.str = <span class="string">"dkdk"</span></div><div class="line">        </div><div class="line">        <span class="keyword">do</span> &#123;</div><div class="line">            <span class="keyword">let</span> protoData: <span class="type">Data</span> = <span class="keyword">try</span> obj.serializedData()</div><div class="line">            <span class="built_in">print</span>(<span class="string">"生成的二进制大小为：<span class="subst">\(protoData.<span class="built_in">count</span>)</span> bytes"</span>)</div><div class="line">            </div><div class="line">            <span class="keyword">let</span> decodedInfo = <span class="keyword">try</span> <span class="type">Im_helloworld</span>(serializedData: protoData)</div><div class="line">            <span class="built_in">print</span>(<span class="string">"decodedInfo str = <span class="subst">\(decodedInfo.str)</span>"</span>)</div><div class="line">            <span class="built_in">print</span>(<span class="string">"decodedInfo opt = <span class="subst">\(decodedInfo.opt)</span>"</span>)</div><div class="line">            <span class="built_in">print</span>(<span class="string">"decodedInfo id = <span class="subst">\(decodedInfo.id)</span>"</span>)</div><div class="line">        &#125; <span class="keyword">catch</span> &#123;</div><div class="line">            <span class="built_in">print</span>(error)</div><div class="line">        &#125;</div><div class="line">        </div><div class="line">    &#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>获得如下输出：</p>
+<p>生成的二进制大小为：10 bytes<br>decodedInfo str = dkdk<br>decodedInfo opt = 12<br>decodedInfo id = 21</p>
+<p>坑：<br>对于直接丢framework到Xcode工程的童鞋，<br><strong>记住千万不要直接拖到工程目录<br>记住千万不要直接拖到工程目录<br>记住千万不要直接拖到工程目录</strong></p>
+<p>因为你需要在General – Embedded Binaries中添加编译出的SwiftProtobuf.framework<br>如果，直接拖拽到工程中使用，会报错：<br>dyld: Library not loaded: @rpath/SwiftProtobuf.framework/SwiftProtobuf<br>Referenced from: /var/containers/Bundle/Application/<strong><em>**</em></strong>/ProductsName.app/ProductsName<br>Reason: image not found</p>
+<p>OK，先简单这样。<br>之后看看golang的导出和简单使用，大概猜到我要干啥了吧~<br>gRPC，木有错~！！<br>新一年继续努力吧</p>
+<p>参考链接：<br>链接：<a href="https://www.jianshu.com/p/751aa2b621d5" target="_blank" rel="external">https://www.jianshu.com/p/751aa2b621d5</a><br>作者：y824165978</p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/12/beego-获取request-body内容/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -833,149 +990,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/06/更好的模式，更轻量级的UITableView/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Barton">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BartonTang的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/10/06/更好的模式，更轻量级的UITableView/" itemprop="url">更好的模式，更轻量级的UITableView</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-06T20:36:19+08:00">
-                2016-10-06
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/10/06/更好的模式，更轻量级的UITableView/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/06/更好的模式，更轻量级的UITableView/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="更好的模式，更轻量级的UITableView"><a href="#更好的模式，更轻量级的UITableView" class="headerlink" title="更好的模式，更轻量级的UITableView"></a>更好的模式，更轻量级的UITableView</h2><p>在软件开发过程中我们经常会运用各类设计模式来使得代码节藕，让代码看起来更整洁，Gof的23种设计模式，值得一看。其他先不谈，先聊聊经常遇到包括去面试的时候面试官会和你聊的MVC等。</p>
-<h3 id="Model-View-Controller"><a href="#Model-View-Controller" class="headerlink" title="Model-View-Controller"></a>Model-View-Controller</h3><p>MVC全名是Model View Controller，是模型(model)－视图(view)－控制器(controller)的缩写，一种软件设计典范，用一种业务逻辑、数据、界面显示分离的方法组织代码，将业务逻辑聚集到一个部件里面，在改进和个性化定制界面及用户交互的同时，不需要重新编写业务逻辑。MVC被独特的发展起来用于映射传统的输入、处理和输出功能在一个逻辑的图形化用户界面的结构中。<br>stop，不想copy了，大家直接看百度吧。😄<br><a href="http://baike.baidu.com/link?url=fkoUlAj1aCwIWLHkDUL4pCbgveQfl8WQ0TmLaflSSYfoH4vhmvNg3_ZqYygAdYvKsD2xMlboEoQJyi2EC_lw0-MhVm4FiGrL2wrSXB4U2z_ckuAjGltNtjHJnfb6hikEbDBzBDJ-RgDx-B8o_tK1hTnWcf1xMzClk5_HTYj3cHe" target="_blank" rel="external">MVC百度介绍</a></p>
-<p>对MVC的延伸扩展有MVVM,MVP大家自行百度吧，不论神马设计模式，请记住切忌不要过分依赖和相信他，有的时候回归本我或许能带给大家更好的效果。</p>
-<p><strong>文章本天成，妙手偶得之</strong><br><strong>设计亦如此</strong></p>
-<p>大而空的介绍那些不想讲了，大家有没发现在包含UITableView的ViewController的时候，必须去实现一堆protocol。一个字：烦，而且这好多重复的代码，每个UITableView其实都大同小异，有多少个cell，每个cell的样式是怎么样的，然后cell里的内容根据model来显示等等。而且这里面会有个小问题，就是view和model有一个交互。。。必须解耦～！因为在一个大的比较良好的工程里面，很多view是应该能够被重用的而不应该是依赖某些特定的Model。如果把绘制的这部分代码写在viewcontroller里，又会造成一个很烦的问题，一旦数据有所更改，你就得去翻这个viewcontroller，尤其是protocol方法多了后简直是找的有点忧桑～！那么我们就应该对这个UITableView进行一个瘦身计划。</p>
-<h3 id="更轻量级的UITableView"><a href="#更轻量级的UITableView" class="headerlink" title="更轻量级的UITableView"></a>更轻量级的UITableView</h3><p>首先我们发现一个tableview无非显示的就是一个数组里的数据，每个数组元素对应的是某个model的实例。那么这个datasource应该是可以抽出来的。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/// DataSource 接口类</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArrayDataSource</span>: <span class="title">NSObject</span>, <span class="title">UITableViewDataSource</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">var</span> items: [<span class="type">AnyObject</span>] = []</div><div class="line">    <span class="keyword">var</span> cellIdentifier = <span class="string">""</span></div><div class="line">    <span class="keyword">var</span> configBlock: (<span class="type">AnyObject</span>, <span class="type">AnyObject</span>) -&gt; <span class="type">Void</span> = &#123;<span class="number">_</span>,<span class="number">_</span> <span class="keyword">in</span> &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">override</span> <span class="keyword">init</span>() &#123;</div><div class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>()</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">initWithItems</span><span class="params">(list: [AnyObject], cellIdentifier: String, configCell: <span class="params">(AnyObject, AnyObject)</span></span></span> -&gt; <span class="type">Void</span> ) -&gt; <span class="type">ArrayDataSource</span> &#123;</div><div class="line">     </div><div class="line">        <span class="keyword">self</span>.items = list</div><div class="line">        <span class="keyword">self</span>.cellIdentifier = cellIdentifier</div><div class="line">        <span class="keyword">self</span>.configBlock = configCell</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">itemAtIndexPath</span><span class="params">(indexPath: NSIndexPath)</span></span> -&gt; <span class="type">AnyObject</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.items[indexPath.row]</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// MARK: DataSource delegate</span></div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">tableView</span><span class="params">(tableView: UITableView, numberOfRowsInSection section: Int)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.items.<span class="built_in">count</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">tableView</span><span class="params">(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath)</span></span> -&gt; <span class="type">UITableViewCell</span> &#123;</div><div class="line">        <span class="keyword">let</span> cell = tableView.dequeueReusableCellWithIdentifier(<span class="keyword">self</span>.cellIdentifier, forIndexPath: indexPath)</div><div class="line">        <span class="keyword">let</span> item = <span class="keyword">self</span>.itemAtIndexPath(indexPath)</div><div class="line">        <span class="keyword">self</span>.configBlock(cell, item)</div><div class="line">        <span class="keyword">return</span> cell</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这个地方就把绘制的数量和cell的样式做了一个抽象。我们再看看具体的UITableView 的datasource的delegate实现的地方。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> list: [<span class="type">MoneyDataInfo</span>] = []</div><div class="line"><span class="keyword">var</span> arrayDataSource: <span class="type">ArrayDataSource</span>?</div><div class="line"><span class="keyword">let</span> cellStoryboardName = <span class="string">"xxTableViewCell"</span></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 初始化tableView</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">setupTableView</span><span class="params">()</span></span> -&gt; <span class="type">Void</span> &#123;</div><div class="line">    <span class="keyword">self</span>.tableView.delegate = <span class="keyword">self</span></div><div class="line">    <span class="keyword">self</span>.tableView.tableFooterView = <span class="type">UIView</span>()</div><div class="line">    </div><div class="line">    <span class="keyword">self</span>.tableView.mj_header = <span class="type">MJRefreshNormalHeader</span>(refreshingTarget: <span class="keyword">self</span>, refreshingAction: #selector(requestAccountRecordList))</div><div class="line">    <span class="keyword">self</span>.tableView.mj_header.beginRefreshing()</div><div class="line">    </div><div class="line">    <span class="keyword">let</span> nib = <span class="type">UINib</span>(nibName: cellStoryboardName, bundle: <span class="type">NSBundle</span>.mainBundle())</div><div class="line">    <span class="keyword">self</span>.tableView.registerNib(nib, forCellReuseIdentifier: cellStoryboardName)</div><div class="line">    </div><div class="line">    <span class="comment">// Adapter</span></div><div class="line">    <span class="keyword">self</span>.setupAdapter()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 构建适配器</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">setupAdapter</span><span class="params">()</span></span> &#123;</div><div class="line">    <span class="comment">// Adapter</span></div><div class="line">    <span class="keyword">self</span>.arrayDataSource = <span class="type">ArrayDataSource</span>()</div><div class="line">    <span class="keyword">self</span>.arrayDataSource?.initWithItems(<span class="keyword">self</span>.list, cellIdentifier: cellStoryboardName, configCell: &#123; (cell: <span class="type">AnyObject</span>, data: <span class="type">AnyObject</span>) <span class="keyword">in</span></div><div class="line">        </div><div class="line">        <span class="keyword">let</span> tmpCell = cell <span class="keyword">as</span>! <span class="type">MoneyInfoCellTableViewCell</span></div><div class="line">        <span class="keyword">let</span> tmpData = data <span class="keyword">as</span>! <span class="type">MoneyDataInfo</span></div><div class="line">        </div><div class="line">        tmpCell.configForData(tmpData)</div><div class="line">    &#125;)</div><div class="line">    </div><div class="line">    <span class="keyword">self</span>.tableView.dataSource = <span class="keyword">self</span>.arrayDataSource</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这样子，只需要在数据发生变化的时候调用一下self.setupAdapter()这个方法即可。</p>
-<p>那么就到了具体cell的绘制的地方。how to do it？<br>我们应该把model传入到cell里去然后逐步绘制么，可以这样子，但并不科学，我们应该好好利用分类。</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">MoneyInfoCellTableViewCell</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="comment">/**</span></div><div class="line">     根据数据填充</div><div class="line">     </div><div class="line">     - parameter data: MoneyDataInfo</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">configForData</span><span class="params">(data: MoneyDataInfo)</span></span> -&gt; <span class="type">Void</span> &#123;</div><div class="line">        </div><div class="line">        <span class="keyword">self</span>.selectionStyle = .<span class="type">None</span></div><div class="line">        ...</div><div class="line">        <span class="comment">// 这个地方根据data来进行对应的绘制</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>为什么这么做，这样子文件写的更多了，但有明显的几个好处，这里的tableviewcell可以重复利用，不耦合具体的数据，当数据有修改的时候，只需要修改这个分类的这个config方法即可，无需再去把viewcontroller折腾一遍，代码更加的清晰，条理性更好！这里抛弃掉了一些大而空的东西，只着力于解决一些具体的事务。<br>无论什么所谓权威的东西都不要过分迷信和执着，都要去尝试它并自己去作出合理的判断。还是用那句话作结尾：<br><strong>文章本天成，妙手偶得之</strong><br><strong>设计亦如此</strong></p>
-<p>参考文献：<br>objc.cn <a href="https://objccn.io/issue-1-1/" target="_blank" rel="external">https://objccn.io/issue-1-1/</a></p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1028,7 +1042,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1096,7 +1110,7 @@
         <div class="copyright" >
   
   &copy;  2016 &mdash; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

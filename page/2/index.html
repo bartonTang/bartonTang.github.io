@@ -264,6 +264,149 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/10/06/更好的模式，更轻量级的UITableView/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Barton">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/1.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="BartonTang的博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2016/10/06/更好的模式，更轻量级的UITableView/" itemprop="url">更好的模式，更轻量级的UITableView</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-10-06T20:36:19+08:00">
+                2016-10-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2016/10/06/更好的模式，更轻量级的UITableView/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/10/06/更好的模式，更轻量级的UITableView/" itemprop="commentCount"></span>
+                </a>
+              </span>
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <h2 id="更好的模式，更轻量级的UITableView"><a href="#更好的模式，更轻量级的UITableView" class="headerlink" title="更好的模式，更轻量级的UITableView"></a>更好的模式，更轻量级的UITableView</h2><p>在软件开发过程中我们经常会运用各类设计模式来使得代码节藕，让代码看起来更整洁，Gof的23种设计模式，值得一看。其他先不谈，先聊聊经常遇到包括去面试的时候面试官会和你聊的MVC等。</p>
+<h3 id="Model-View-Controller"><a href="#Model-View-Controller" class="headerlink" title="Model-View-Controller"></a>Model-View-Controller</h3><p>MVC全名是Model View Controller，是模型(model)－视图(view)－控制器(controller)的缩写，一种软件设计典范，用一种业务逻辑、数据、界面显示分离的方法组织代码，将业务逻辑聚集到一个部件里面，在改进和个性化定制界面及用户交互的同时，不需要重新编写业务逻辑。MVC被独特的发展起来用于映射传统的输入、处理和输出功能在一个逻辑的图形化用户界面的结构中。<br>stop，不想copy了，大家直接看百度吧。😄<br><a href="http://baike.baidu.com/link?url=fkoUlAj1aCwIWLHkDUL4pCbgveQfl8WQ0TmLaflSSYfoH4vhmvNg3_ZqYygAdYvKsD2xMlboEoQJyi2EC_lw0-MhVm4FiGrL2wrSXB4U2z_ckuAjGltNtjHJnfb6hikEbDBzBDJ-RgDx-B8o_tK1hTnWcf1xMzClk5_HTYj3cHe" target="_blank" rel="external">MVC百度介绍</a></p>
+<p>对MVC的延伸扩展有MVVM,MVP大家自行百度吧，不论神马设计模式，请记住切忌不要过分依赖和相信他，有的时候回归本我或许能带给大家更好的效果。</p>
+<p><strong>文章本天成，妙手偶得之</strong><br><strong>设计亦如此</strong></p>
+<p>大而空的介绍那些不想讲了，大家有没发现在包含UITableView的ViewController的时候，必须去实现一堆protocol。一个字：烦，而且这好多重复的代码，每个UITableView其实都大同小异，有多少个cell，每个cell的样式是怎么样的，然后cell里的内容根据model来显示等等。而且这里面会有个小问题，就是view和model有一个交互。。。必须解耦～！因为在一个大的比较良好的工程里面，很多view是应该能够被重用的而不应该是依赖某些特定的Model。如果把绘制的这部分代码写在viewcontroller里，又会造成一个很烦的问题，一旦数据有所更改，你就得去翻这个viewcontroller，尤其是protocol方法多了后简直是找的有点忧桑～！那么我们就应该对这个UITableView进行一个瘦身计划。</p>
+<h3 id="更轻量级的UITableView"><a href="#更轻量级的UITableView" class="headerlink" title="更轻量级的UITableView"></a>更轻量级的UITableView</h3><p>首先我们发现一个tableview无非显示的就是一个数组里的数据，每个数组元素对应的是某个model的实例。那么这个datasource应该是可以抽出来的。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/// DataSource 接口类</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">ArrayDataSource</span>: <span class="title">NSObject</span>, <span class="title">UITableViewDataSource</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="keyword">var</span> items: [<span class="type">AnyObject</span>] = []</div><div class="line">    <span class="keyword">var</span> cellIdentifier = <span class="string">""</span></div><div class="line">    <span class="keyword">var</span> configBlock: (<span class="type">AnyObject</span>, <span class="type">AnyObject</span>) -&gt; <span class="type">Void</span> = &#123;<span class="number">_</span>,<span class="number">_</span> <span class="keyword">in</span> &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">override</span> <span class="keyword">init</span>() &#123;</div><div class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>()</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">initWithItems</span><span class="params">(list: [AnyObject], cellIdentifier: String, configCell: <span class="params">(AnyObject, AnyObject)</span></span></span> -&gt; <span class="type">Void</span> ) -&gt; <span class="type">ArrayDataSource</span> &#123;</div><div class="line">     </div><div class="line">        <span class="keyword">self</span>.items = list</div><div class="line">        <span class="keyword">self</span>.cellIdentifier = cellIdentifier</div><div class="line">        <span class="keyword">self</span>.configBlock = configCell</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">itemAtIndexPath</span><span class="params">(indexPath: NSIndexPath)</span></span> -&gt; <span class="type">AnyObject</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.items[indexPath.row]</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="comment">// MARK: DataSource delegate</span></div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">tableView</span><span class="params">(tableView: UITableView, numberOfRowsInSection section: Int)</span></span> -&gt; <span class="type">Int</span> &#123;</div><div class="line">        <span class="keyword">return</span> <span class="keyword">self</span>.items.<span class="built_in">count</span></div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">tableView</span><span class="params">(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath)</span></span> -&gt; <span class="type">UITableViewCell</span> &#123;</div><div class="line">        <span class="keyword">let</span> cell = tableView.dequeueReusableCellWithIdentifier(<span class="keyword">self</span>.cellIdentifier, forIndexPath: indexPath)</div><div class="line">        <span class="keyword">let</span> item = <span class="keyword">self</span>.itemAtIndexPath(indexPath)</div><div class="line">        <span class="keyword">self</span>.configBlock(cell, item)</div><div class="line">        <span class="keyword">return</span> cell</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这个地方就把绘制的数量和cell的样式做了一个抽象。我们再看看具体的UITableView 的datasource的delegate实现的地方。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">var</span> list: [<span class="type">MoneyDataInfo</span>] = []</div><div class="line"><span class="keyword">var</span> arrayDataSource: <span class="type">ArrayDataSource</span>?</div><div class="line"><span class="keyword">let</span> cellStoryboardName = <span class="string">"xxTableViewCell"</span></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 初始化tableView</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">setupTableView</span><span class="params">()</span></span> -&gt; <span class="type">Void</span> &#123;</div><div class="line">    <span class="keyword">self</span>.tableView.delegate = <span class="keyword">self</span></div><div class="line">    <span class="keyword">self</span>.tableView.tableFooterView = <span class="type">UIView</span>()</div><div class="line">    </div><div class="line">    <span class="keyword">self</span>.tableView.mj_header = <span class="type">MJRefreshNormalHeader</span>(refreshingTarget: <span class="keyword">self</span>, refreshingAction: #selector(requestAccountRecordList))</div><div class="line">    <span class="keyword">self</span>.tableView.mj_header.beginRefreshing()</div><div class="line">    </div><div class="line">    <span class="keyword">let</span> nib = <span class="type">UINib</span>(nibName: cellStoryboardName, bundle: <span class="type">NSBundle</span>.mainBundle())</div><div class="line">    <span class="keyword">self</span>.tableView.registerNib(nib, forCellReuseIdentifier: cellStoryboardName)</div><div class="line">    </div><div class="line">    <span class="comment">// Adapter</span></div><div class="line">    <span class="keyword">self</span>.setupAdapter()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> 构建适配器</div><div class="line"> */</div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">setupAdapter</span><span class="params">()</span></span> &#123;</div><div class="line">    <span class="comment">// Adapter</span></div><div class="line">    <span class="keyword">self</span>.arrayDataSource = <span class="type">ArrayDataSource</span>()</div><div class="line">    <span class="keyword">self</span>.arrayDataSource?.initWithItems(<span class="keyword">self</span>.list, cellIdentifier: cellStoryboardName, configCell: &#123; (cell: <span class="type">AnyObject</span>, data: <span class="type">AnyObject</span>) <span class="keyword">in</span></div><div class="line">        </div><div class="line">        <span class="keyword">let</span> tmpCell = cell <span class="keyword">as</span>! <span class="type">MoneyInfoCellTableViewCell</span></div><div class="line">        <span class="keyword">let</span> tmpData = data <span class="keyword">as</span>! <span class="type">MoneyDataInfo</span></div><div class="line">        </div><div class="line">        tmpCell.configForData(tmpData)</div><div class="line">    &#125;)</div><div class="line">    </div><div class="line">    <span class="keyword">self</span>.tableView.dataSource = <span class="keyword">self</span>.arrayDataSource</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这样子，只需要在数据发生变化的时候调用一下self.setupAdapter()这个方法即可。</p>
+<p>那么就到了具体cell的绘制的地方。how to do it？<br>我们应该把model传入到cell里去然后逐步绘制么，可以这样子，但并不科学，我们应该好好利用分类。</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">extension</span> <span class="title">MoneyInfoCellTableViewCell</span> </span>&#123;</div><div class="line">    </div><div class="line">    <span class="comment">/**</span></div><div class="line">     根据数据填充</div><div class="line">     </div><div class="line">     - parameter data: MoneyDataInfo</div><div class="line">     */</div><div class="line">    <span class="function"><span class="keyword">func</span> <span class="title">configForData</span><span class="params">(data: MoneyDataInfo)</span></span> -&gt; <span class="type">Void</span> &#123;</div><div class="line">        </div><div class="line">        <span class="keyword">self</span>.selectionStyle = .<span class="type">None</span></div><div class="line">        ...</div><div class="line">        <span class="comment">// 这个地方根据data来进行对应的绘制</span></div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>为什么这么做，这样子文件写的更多了，但有明显的几个好处，这里的tableviewcell可以重复利用，不耦合具体的数据，当数据有修改的时候，只需要修改这个分类的这个config方法即可，无需再去把viewcontroller折腾一遍，代码更加的清晰，条理性更好！这里抛弃掉了一些大而空的东西，只着力于解决一些具体的事务。<br>无论什么所谓权威的东西都不要过分迷信和执着，都要去尝试它并自己去作出合理的判断。还是用那句话作结尾：<br><strong>文章本天成，妙手偶得之</strong><br><strong>设计亦如此</strong></p>
+<p>参考文献：<br>objc.cn <a href="https://objccn.io/issue-1-1/" target="_blank" rel="external">https://objccn.io/issue-1-1/</a></p>
+
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/09/11/iOS工程第三方代码包管理/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -823,162 +966,6 @@
 
 
     
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2016/08/04/beego-框架搭建和简单http路由请求/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="Barton">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/1.jpg">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="BartonTang的博客">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2016/08/04/beego-框架搭建和简单http路由请求/" itemprop="url">beego 框架搭建和简单http路由请求</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2016-08-04T20:03:52+08:00">
-                2016-08-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-              <span class="post-comments-count">
-                <span class="post-meta-divider">|</span>
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-comment-o"></i>
-                </span>
-                <a href="/2016/08/04/beego-框架搭建和简单http路由请求/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count ds-thread-count" data-thread-key="2016/08/04/beego-框架搭建和简单http路由请求/" itemprop="commentCount"></span>
-                </a>
-              </span>
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <h2 id="beego-框架搭建和简单http路由请求"><a href="#beego-框架搭建和简单http路由请求" class="headerlink" title="beego 框架搭建和简单http路由请求"></a>beego 框架搭建和简单http路由请求</h2><p>闲来无事，学习Go的服务器框架beego。</p>
-<h3 id="beego-框架搭建："><a href="#beego-框架搭建：" class="headerlink" title="beego 框架搭建："></a>beego 框架搭建：</h3><p>先安装Golang，这个不会的可以看<a href="http://bartontang.github.io/2016/03/31/Golang-环境配置与安装/" target="_blank" rel="external">http://bartontang.github.io/2016/03/31/Golang-环境配置与安装/</a><br>直接github下载bee工具</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">go get github.com/beego/bee</div></pre></td></tr></table></figure>
-<p>安装完成后可通过bee命令来查看是否安装成功，这里不好的是安装bee工具的时候木有任何进度显示不太科学，成功后如下所示：<br><img src="http://o98au0nko.bkt.clouddn.com/4.png" alt=""></p>
-<p>OK，接着我们需要在$GOPATH/src目录下new 一个新的project，切记执行bee new YourPorjectName 这个命令的时候必须是在<strong>GOPATH/src</strong>目录下</p>
-<p>工程创建完后直接执行，在工程目录下直接执行</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">bee run</div></pre></td></tr></table></figure>
-<p>那么服务器就在8080端口启动起来了，如下所示：<br><img src="http://o98au0nko.bkt.clouddn.com/5.png" alt=""></p>
-<p>这里我把配置表里的8088监控端口打开了，具体的配置文件在 /conf/app.conf 文件里</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">appname = quickstart</div><div class="line">httpport = 8080</div><div class="line">runmode = dev</div><div class="line">EnableAdmin = <span class="literal">true</span></div><div class="line">AdminAddr = <span class="string">"localhost"</span></div><div class="line">AdminPort = 8088</div></pre></td></tr></table></figure>
-<p>这部分大家可以先忽略～现在服务器已经跑起来了，我们用网页打开<a href="http://localhost:8080" target="_blank" rel="external">http://localhost:8080</a> 就能看到一个beego的页面了。<br>好，安装就先到这里。接下来我们来看下路由和简单的http请求。</p>
-<h3 id="简单http路由请求"><a href="#简单http路由请求" class="headerlink" title="简单http路由请求:"></a>简单http路由请求:</h3><p>打开/routers/route.go文件</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> routers</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">	<span class="string">"quickstart/controllers"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</div><div class="line">	beego.Router(<span class="string">"/"</span>, &amp;controllers.MainController&#123;&#125;)</div><div class="line">	beego.Router(<span class="string">"/test"</span>, &amp;controllers.TestController&#123;&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里仿照default增加了一个url并把路由处理映射到TestController中</p>
-<p>接下来我们看一下TestController.go中的代码</p>
-<figure class="highlight golang"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">package</span> controllers</div><div class="line"></div><div class="line"><span class="keyword">import</span> (</div><div class="line">	<span class="string">"github.com/astaxie/beego"</span></div><div class="line">)</div><div class="line"></div><div class="line"><span class="keyword">type</span> TestController <span class="keyword">struct</span> &#123;</div><div class="line">	beego.Controller</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">Get</span><span class="params">()</span></span> &#123;</div><div class="line">	c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">		<span class="string">"msg"</span>:  <span class="string">"success"</span>,</div><div class="line">		<span class="string">"data"</span>: <span class="literal">false</span>,</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *TestController)</span> <span class="title">Post</span><span class="params">()</span></span> &#123;</div><div class="line">	account := c.GetString(<span class="string">"account"</span>)</div><div class="line">	password := c.GetString(<span class="string">"password"</span>)</div><div class="line">	beego.Info(account)</div><div class="line"></div><div class="line">	c.Data[<span class="string">"json"</span>] = <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;<span class="string">"rc"</span>: <span class="number">1</span>,</div><div class="line">		<span class="string">"msg"</span>: <span class="string">"success"</span>,</div><div class="line">		<span class="string">"data"</span>: <span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;&#123;</div><div class="line">			<span class="string">"account"</span>:  account,</div><div class="line">			<span class="string">"password"</span>: password,</div><div class="line">		&#125;,</div><div class="line">	&#125;</div><div class="line"></div><div class="line">	c.ServeJSON()</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>这里分别对Get和Post都做了处理~Get就直接返回一个Json数据给Client；Post呢则是接收Client传过来的两个Json字段account 和 password 并且将account 和 password再重新发回给Client。<br>beego.Info(account) 这句话是打印account出来</p>
-<p>下面就用swift做个小测试，下面这个是自己封装过的代码，先随便贴下：</p>
-<figure class="highlight swift"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">let</span> t = <span class="type">NetworkController</span>.shareManager()</div><div class="line"> t.request(.<span class="type">GET</span>, <span class="string">"http://localhost:8080/test"</span>).responseJSON &#123; (resp: <span class="type">Response</span>&lt;<span class="type">AnyObject</span>, <span class="type">NSError</span>&gt;) <span class="keyword">in</span></div><div class="line">	<span class="built_in">print</span>(resp.request)  <span class="comment">// original URL request</span></div><div class="line">	<span class="built_in">print</span>(resp.response) <span class="comment">// URL response</span></div><div class="line">	<span class="built_in">print</span>(resp.data)     <span class="comment">// server data</span></div><div class="line">	<span class="built_in">print</span>(resp.result)   <span class="comment">// result of response serialization</span></div><div class="line">	<span class="type">DDLogError</span>(resp.debugDescription)</div><div class="line">            </div><div class="line">	<span class="keyword">if</span> <span class="keyword">let</span> <span class="type">JSON</span> = resp.result.value &#123;</div><div class="line">		<span class="built_in">print</span>(<span class="string">"JSON: <span class="subst">\(JSON)</span>"</span>)</div><div class="line">                </div><div class="line">		<span class="keyword">let</span> account = <span class="type">JSON</span>.objectForKey(<span class="string">"msg"</span>)!</div><div class="line">			<span class="built_in">print</span>(<span class="string">"----------account = <span class="subst">\(account)</span>"</span>)           </div><div class="line">		&#125;</div><div class="line">&#125;</div><div class="line">        </div><div class="line">t.request(.<span class="type">POST</span>, <span class="string">"http://localhost:8080/test"</span>, parameters: [<span class="string">"account"</span>: <span class="string">"13800138000"</span>, <span class="string">"password"</span>: <span class="string">"123456"</span>]).responseJSON &#123; (resp:<span class="type">Response</span>&lt;<span class="type">AnyObject</span>, <span class="type">NSError</span>&gt;) <span class="keyword">in</span></div><div class="line">	<span class="built_in">print</span>(resp.request)  <span class="comment">// original URL request</span></div><div class="line">	<span class="built_in">print</span>(resp.response) <span class="comment">// URL response</span></div><div class="line">	<span class="built_in">print</span>(resp.data)     <span class="comment">// server data</span></div><div class="line">	<span class="built_in">print</span>(resp.result)   <span class="comment">// result of response serialization</span></div><div class="line">	<span class="type">DDLogError</span>(resp.debugDescription)</div><div class="line">            </div><div class="line">	<span class="keyword">if</span> <span class="keyword">let</span> <span class="type">JSON</span> = resp.result.value &#123;</div><div class="line">		<span class="type">DDLogWarn</span>(<span class="string">"JSON: <span class="subst">\(JSON)</span>"</span>)           </div><div class="line">     &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>server端结果如下：</p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/6.png" alt=""></p>
-<p>这里我们看到我们收到了连个请求，一个Get一个Post而且我们把Post数据中的account打印出来啦~~</p>
-<p>client端结果如下：</p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/7.png" alt=""></p>
-<p><img src="http://o98au0nko.bkt.clouddn.com/8.png" alt=""></p>
-<p>我们成功的获取了server回给client的json数据。</p>
-<p>先写这么多，后面会讲讲怎么将beego部署到阿里云上~！</p>
-
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
   </section>
 
   
@@ -1031,7 +1018,7 @@
             
               <a href="/archives/">
             
-                <span class="site-state-item-count">17</span>
+                <span class="site-state-item-count">18</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -1099,7 +1086,7 @@
         <div class="copyright" >
   
   &copy;  2016 &mdash; 
-  <span itemprop="copyrightYear">2017</span>
+  <span itemprop="copyrightYear">2018</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
